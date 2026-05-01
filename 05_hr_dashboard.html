@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Anveshan Industries — HR Onboarding Dashboard</title>
+<style>
+  :root {
+    --brand: #1e3a5f;
+    --accent: #0ea5e9;
+    --danger: #dc2626;
+    --warn:   #ea580c;
+    --ok:     #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; }
+  header {
+    background: var(--brand); color: #fff;
+    padding: 18px 32px; display: flex; justify-content: space-between; align-items: center;
+  }
+  header h1 { font-size: 22px; font-weight: 700; }
+  header p  { font-size: 13px; opacity: .8; }
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+    gap: 16px; padding: 24px 32px;
+  }
+  .kpi {
+    background:#fff; border-radius:10px; padding:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1); text-align:center;
+  }
+  .kpi .val { font-size:36px; font-weight:800; color:var(--brand); }
+  .kpi .lbl { font-size:13px; color:#64748b; margin-top:4px; }
+  .kpi.danger .val { color:var(--danger); }
+  .kpi.warn   .val { color:var(--warn); }
+  .section {
+    margin: 0 32px 24px; background:#fff; border-radius:10px;
+    box-shadow:0 1px 3px rgba(0,0,0,.1); overflow:hidden;
+  }
+  .section h2 {
+    background:var(--brand); color:#fff; padding:14px 20px;
+    font-size:16px; font-weight:600;
+  }
+  .section-body { padding:20px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { background:#f1f5f9; text-align:left; padding:8px 10px; color:#475569; font-weight:600; }
+  td { padding:8px 10px; border-bottom:1px solid #f1f5f9; vertical-align:top; }
+  tr:hover td { background:#f8fafc; }
+  .badge {
+    display:inline-block; padding:2px 9px; border-radius:12px;
+    font-size:11px; font-weight:700; color:#fff; white-space:nowrap;
+  }
+  .bar-row { display:flex; align-items:center; margin:8px 0; gap:10px; }
+  .bar-label { width:200px; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar-track { flex:1; background:#e2e8f0; border-radius:4px; height:18px; }
+  .bar-fill  { height:18px; border-radius:4px; transition:width .3s; }
+  .bar-val   { width:80px; font-size:12px; color:#64748b; text-align:right; }
+  .charts-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; padding:20px; }
+  .chart-box { background:#f8fafc; border-radius:8px; padding:16px; }
+  .chart-box h3 { font-size:14px; color:var(--brand); margin-bottom:12px; font-weight:600; }
+  .gen-note { text-align:center; font-size:12px; color:#94a3b8; padding:16px 32px 24px; }
+  @media(max-width:768px) {
+    .kpi-grid { padding:16px; }
+    .section  { margin:0 16px 16px; }
+    .charts-grid { grid-template-columns:1fr; }
+    .bar-label { width:120px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🏢 Anveshan Industries — HR Onboarding Dashboard</h1>
+    <p>Auto-generated | As of 2026-04-30 | Batch: April 2026 Joinee Cohort</p>
+  </div>
+  <div style="text-align:right;font-size:12px;opacity:.8;">
+    Source: new_joinees.csv<br>
+    Powered by Onboarding Automation Engine v1.0
+  </div>
+</header>
+
+<!-- KPI Row -->
+<div class="kpi-grid">
+  <div class="kpi">
+    <div class="val">8</div>
+    <div class="lbl">Total Joinees</div>
+  </div>
+  <div class="kpi">
+    <div class="val">118</div>
+    <div class="lbl">Tasks Generated</div>
+  </div>
+  <div class="kpi danger">
+    <div class="val">55</div>
+    <div class="lbl">Escalation Flags</div>
+  </div>
+  <div class="kpi warn">
+    <div class="val">0</div>
+    <div class="lbl">Missing Owners</div>
+  </div>
+  <div class="kpi warn">
+    <div class="val">33</div>
+    <div class="lbl">Tasks Due in 7 Days</div>
+  </div>
+  <div class="kpi danger">
+    <div class="val">8</div>
+    <div class="lbl">Joinees Needing HR Attention</div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="section">
+  <h2>📊 Task Breakdown</h2>
+  <div class="charts-grid">
+    <div class="chart-box">
+      <h3>Tasks by Sensitivity</h3>
+      
+        <div class="bar-row">
+          <span class="bar-label">Standard</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:70%;background:#3b82f6"></div>
+          </div>
+          <span class="bar-val">83 (70%)</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Confidential</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:28%;background:#7c3aed"></div>
+          </div>
+          <span class="bar-val">33 (28%)</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Highly Confidential</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:2%;background:#dc2626"></div>
+          </div>
+          <span class="bar-val">2 (2%)</span>
+        </div>
+    </div>
+    <div class="chart-box">
+      <h3>Tasks by Owner (Top 10)</h3>
+      
+        <div class="bar-row">
+          <span class="bar-label">Priya Saxena</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:100%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">39</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Sanjay Kohli</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:72%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">28</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Asha Verma</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:41%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">16</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Rohit Singh</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:21%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">8</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Anand Krishnan</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:10%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">4</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Mukesh Yadav</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:10%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">4</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Manish Khurana</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:10%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">4</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Dr. Anjali Reddy</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:10%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">4</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Suresh Kumar</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:10%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">4</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Vikram Anveshan (via EA)</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:8%;background:#0ea5e9"></div>
+          </div>
+          <span class="bar-val">3</span>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- Joinee Summary -->
+<div class="section">
+  <h2>👥 Joinee Summary (All 8 Joinees)</h2>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th>Emp ID</th><th>Name</th><th>Department</th><th>Location</th>
+        <th>Joining Date</th><th>Tasks</th><th>Confidential</th>
+        <th>At Risk</th><th>Escalation</th><th>Next Action for HR</th>
+      </tr>
+      
+        <tr style="background:#fff1f0">
+          <td>ANV-2026-0234</td>
+          <td><b>Aarav Kapoor</b></td>
+          <td>Sales & Marketing</td>
+          <td>Delhi HQ</td>
+          <td>2026-05-12</td>
+          <td>14</td>
+          <td>4</td>
+          <td>1</td>
+          <td><span class="badge" style="background:#dc2626">Yes</span></td>
+          <td style="font-size:12px">1 tasks overdue/at-risk — review and expedite with respective owners.</td>
+        </tr>
+        <tr style="background:#fff1f0">
+          <td>ANV-2026-0235</td>
+          <td><b>Riya Patel</b></td>
+          <td>Quality</td>
+          <td>Manesar Plant</td>
+          <td>2026-05-05</td>
+          <td>16</td>
+          <td>5</td>
+          <td>16</td>
+          <td><span class="badge" style="background:#dc2626">Yes</span></td>
+          <td style="font-size:12px">16 tasks overdue/at-risk — review and expedite with respective owners.</td>
+        </tr>
+        <tr >
+          <td>ANV-2026-0236</td>
+          <td><b>Karan Singh</b></td>
+          <td>R&D and Innovation</td>
+          <td>Manesar Plant</td>
+          <td>2026-06-01</td>
+          <td>16</td>
+          <td>4</td>
+          <td>0</td>
+          <td><span class="badge" style="background:#16a34a">No</span></td>
+          <td style="font-size:12px">Next action: 'Generate offer letter and send for signature' (due 2026-05-18, owner: Asha Verma)</td>
+        </tr>
+        <tr style="background:#fff1f0">
+          <td>ANV-2026-0237</td>
+          <td><b>Meera Iyer</b></td>
+          <td>Finance & Accounts</td>
+          <td>Delhi HQ</td>
+          <td>2026-05-08</td>
+          <td>14</td>
+          <td>4</td>
+          <td>3</td>
+          <td><span class="badge" style="background:#dc2626">Yes</span></td>
+          <td style="font-size:12px">3 tasks overdue/at-risk — review and expedite with respective owners.</td>
+        </tr>
+        <tr style="background:#fff1f0">
+          <td>ANV-2026-0238</td>
+          <td><b>Arjun Nair</b></td>
+          <td>Manufacturing</td>
+          <td>Aurangabad Plant</td>
+          <td>2026-04-29</td>
+          <td>16</td>
+          <td>5</td>
+          <td>16</td>
+          <td><span class="badge" style="background:#dc2626">Yes</span></td>
+          <td style="font-size:12px">IMMEDIATE: Joinee already on-site — complete all pending tasks retroactively and get HR Manager sign-off.</td>
+        </tr>
+        <tr >
+          <td>ANV-2026-0239</td>
+          <td><b>Tara Joshi</b></td>
+          <td>Human Resources</td>
+          <td>Delhi HQ</td>
+          <td>2026-05-15</td>
+          <td>11</td>
+          <td>3</td>
+          <td>0</td>
+          <td><span class="badge" style="background:#16a34a">No</span></td>
+          <td style="font-size:12px">Next action: 'Generate offer letter and send for signature' (due 2026-05-01, owner: Asha Verma)</td>
+        </tr>
+        <tr style="background:#fff1f0">
+          <td>ANV-2026-0240</td>
+          <td><b>Vivaan Kumar</b></td>
+          <td>R&D and Innovation</td>
+          <td>Manesar Plant</td>
+          <td>2026-05-20</td>
+          <td>19</td>
+          <td>6</td>
+          <td>19</td>
+          <td><span class="badge" style="background:#dc2626">Yes</span></td>
+          <td style="font-size:12px">19 tasks overdue/at-risk — review and expedite with respective owners.</td>
+        </tr>
+        <tr >
+          <td>ANV-2026-0241</td>
+          <td><b>Diya mishra</b></td>
+          <td>Sales & Marketing</td>
+          <td>Delhi HQ</td>
+          <td>2026-05-18</td>
+          <td>12</td>
+          <td>4</td>
+          <td>0</td>
+          <td><span class="badge" style="background:#16a34a">No</span></td>
+          <td style="font-size:12px">Next action: 'Generate offer letter and send for signature' (due 2026-05-04, owner: Asha Verma)</td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<!-- Escalation List -->
+<div class="section">
+  <h2>🚨 Urgent Escalations</h2>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th>Priority</th><th>Joinee</th><th>Joining Date</th>
+        <th>Task</th><th>Owner</th><th>Reason</th><th>Recommended Action</th>
+      </tr>
+      
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Send welcome email + day 1 instructions</td>
+          <td>Priya Saxena</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Create employee record in HRMS</td>
+          <td>Priya Saxena</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Generate offer letter and send for signature</td>
+          <td>Asha Verma</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Background verification initiation</td>
+          <td>Priya Saxena</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Order laptop and peripherals</td>
+          <td>Sanjay Kohli</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Create email account and basic system access</td>
+          <td>Sanjay Kohli</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Reporting manager briefing - role expectations</td>
+          <td>Rakesh Tiwari</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Schedule day 1 induction meeting</td>
+          <td>Priya Saxena</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Issue ID card and access badges</td>
+          <td>Rohit Singh</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Add to org-wide email distribution lists</td>
+          <td>Sanjay Kohli</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Plant safety induction scheduling</td>
+          <td>Mukesh Yadav</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Issue safety PPE (helmet, shoes, vest)</td>
+          <td>Suresh Kumar</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>MES system access provisioning</td>
+          <td>Sanjay Kohli</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>NDA + IP Assignment deed signature collection</td>
+          <td>Asha Verma</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>NDA + IP Assignment deed signature collection</td>
+          <td>Anand Krishnan</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#dc2626">Critical</span></td>
+          <td>Arjun Nair (ANV-2026-0238)</td>
+          <td>2026-04-29</td>
+          <td>Provident Fund and ESI registration</td>
+          <td>Priya Saxena</td>
+          <td>Joinee already joined on 2026-04-29 — all tasks OVERDUE</td>
+          <td>IMMEDIATE: Contact HR Manager and reporting manager now. Execute all pending tasks same-day. Document all deviations.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#ea580c">High</span></td>
+          <td>Riya Patel (ANV-2026-0235)</td>
+          <td>2026-05-05</td>
+          <td>Send welcome email + day 1 instructions</td>
+          <td>Priya Saxena</td>
+          <td>Urgent joining: only 5 days lead time (policy minimum = 7 days)</td>
+          <td>Within 24h: Coordinate with task owner to expedite. HR Manager must approve any compressed timelines.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#ea580c">High</span></td>
+          <td>Riya Patel (ANV-2026-0235)</td>
+          <td>2026-05-05</td>
+          <td>Create employee record in HRMS</td>
+          <td>Priya Saxena</td>
+          <td>Due date 2026-04-28 already passed (today 2026-04-30)</td>
+          <td>Within 24h: Coordinate with task owner to expedite. HR Manager must approve any compressed timelines.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#ea580c">High</span></td>
+          <td>Riya Patel (ANV-2026-0235)</td>
+          <td>2026-05-05</td>
+          <td>Generate offer letter and send for signature</td>
+          <td>Asha Verma</td>
+          <td>Due date 2026-04-21 already passed (today 2026-04-30)</td>
+          <td>Within 24h: Coordinate with task owner to expedite. HR Manager must approve any compressed timelines.</td>
+        </tr>
+        <tr>
+          <td><span class="badge" style="background:#ea580c">High</span></td>
+          <td>Riya Patel (ANV-2026-0235)</td>
+          <td>2026-05-05</td>
+          <td>Background verification initiation</td>
+          <td>Priya Saxena</td>
+          <td>Due date 2026-04-25 already passed (today 2026-04-30)</td>
+          <td>Within 24h: Coordinate with task owner to expedite. HR Manager must approve any compressed timelines.</td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<!-- Next 7 Days -->
+<div class="section">
+  <h2>📅 Tasks Due in Next 7 Days (2026-04-30 → 2026-05-07)</h2>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th>Due Date</th><th>Joinee</th><th>Task</th>
+        <th>Owner</th><th>Sensitivity</th><th>Status</th>
+      </tr>
+      
+        <tr>
+          <td>2026-04-30</td>
+          <td>Riya Patel</td>
+          <td>T001: Send welcome email + day 1 instructions</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-04-30</td>
+          <td>Riya Patel</td>
+          <td>T008: Schedule day 1 induction meeting</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-04-30</td>
+          <td>Riya Patel</td>
+          <td>T018: Provident Fund and ESI registration</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-01</td>
+          <td>Tara Joshi</td>
+          <td>T003: Generate offer letter and send for signature</td>
+          <td>Asha Verma</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-01</td>
+          <td>Meera Iyer</td>
+          <td>T019: CXO welcome call (CTC > 15 LPA)</td>
+          <td>Vikram Anveshan (via EA)</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-01</td>
+          <td>Meera Iyer</td>
+          <td>T005: Order laptop and peripherals</td>
+          <td>Sanjay Kohli</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-01</td>
+          <td>Meera Iyer</td>
+          <td>T002: Create employee record in HRMS</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-02</td>
+          <td>Aarav Kapoor</td>
+          <td>T004: Background verification initiation</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-02</td>
+          <td>Riya Patel</td>
+          <td>T007: Reporting manager briefing - role expectations</td>
+          <td>Sunil Bhatia</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-02</td>
+          <td>Riya Patel</td>
+          <td>T011: Plant safety induction scheduling</td>
+          <td>Mukesh Yadav</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-03</td>
+          <td>Riya Patel</td>
+          <td>T006: Create email account and basic system access</td>
+          <td>Sanjay Kohli</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-03</td>
+          <td>Meera Iyer</td>
+          <td>T018: Provident Fund and ESI registration</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-03</td>
+          <td>Meera Iyer</td>
+          <td>T008: Schedule day 1 induction meeting</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-03</td>
+          <td>Riya Patel</td>
+          <td>T013: MES system access provisioning</td>
+          <td>Sanjay Kohli</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-03</td>
+          <td>Meera Iyer</td>
+          <td>T001: Send welcome email + day 1 instructions</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-04</td>
+          <td>Riya Patel</td>
+          <td>T014: NDA + IP Assignment deed signature collection</td>
+          <td>Asha Verma</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-04</td>
+          <td>Riya Patel</td>
+          <td>T014: NDA + IP Assignment deed signature collection</td>
+          <td>Anand Krishnan</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-04</td>
+          <td>Diya mishra</td>
+          <td>T003: Generate offer letter and send for signature</td>
+          <td>Asha Verma</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-04</td>
+          <td>Riya Patel</td>
+          <td>T012: Issue safety PPE (helmet, shoes, vest)</td>
+          <td>Suresh Kumar</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-04</td>
+          <td>Riya Patel</td>
+          <td>T010: Add to org-wide email distribution lists</td>
+          <td>Sanjay Kohli</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-04</td>
+          <td>Riya Patel</td>
+          <td>T009: Issue ID card and access badges</td>
+          <td>Rohit Singh</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#ea580c">AT RISK</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-05</td>
+          <td>Aarav Kapoor</td>
+          <td>T019: CXO welcome call (CTC > 15 LPA)</td>
+          <td>Vikram Anveshan (via EA)</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-05</td>
+          <td>Meera Iyer</td>
+          <td>T007: Reporting manager briefing - role expectations</td>
+          <td>Rohit Bansal</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-05</td>
+          <td>Aarav Kapoor</td>
+          <td>T005: Order laptop and peripherals</td>
+          <td>Sanjay Kohli</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-05</td>
+          <td>Aarav Kapoor</td>
+          <td>T002: Create employee record in HRMS</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-05</td>
+          <td>Tara Joshi</td>
+          <td>T004: Background verification initiation</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-06</td>
+          <td>Meera Iyer</td>
+          <td>T006: Create email account and basic system access</td>
+          <td>Sanjay Kohli</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-06</td>
+          <td>Vivaan Kumar</td>
+          <td>T003: Generate offer letter and send for signature</td>
+          <td>Asha Verma</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#6b7280">FLAGGED</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-07</td>
+          <td>Aarav Kapoor</td>
+          <td>T018: Provident Fund and ESI registration</td>
+          <td>Priya Saxena</td>
+          <td><span class="badge" style="background:#7c3aed">Confidential</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+        <tr>
+          <td>2026-05-07</td>
+          <td>Meera Iyer</td>
+          <td>T009: Issue ID card and access badges</td>
+          <td>Rohit Singh</td>
+          <td><span class="badge" style="background:#3b82f6">Standard</span></td>
+          <td><span class="badge" style="background:#16a34a">Pending</span></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<!-- Owner Digest -->
+<div class="section">
+  <h2>📋 Owner-Wise Digest</h2>
+  <div class="section-body">
+    <table>
+      <tr>
+        <th>Owner</th><th>Email</th><th>Total Tasks</th>
+        <th>Urgent</th><th>Due Today</th><th>Joinees Covered</th>
+      </tr>
+      
+        <tr>
+          <td><b>Priya Saxena</b></td>
+          <td>priya.saxena@anveshan.in</td>
+          <td style="text-align:center">39</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">16</span></td>
+          <td style="text-align:center">3</td>
+          <td style="font-size:11px">Aarav Kapoor (ANV-2026-0234), Riya Patel (ANV-2026-0235), Karan Singh (ANV-2026-0236), Meera Iyer (ANV-2026-0237), Arjun Nair (ANV-2026-0238), Tara Joshi (ANV-2026-0239), Vivaan Kumar (ANV-2026-0240), Diya mishra (ANV-2026-0241)</td>
+        </tr>
+        <tr>
+          <td><b>Sanjay Kohli</b></td>
+          <td>sanjay.kohli@anveshan.in</td>
+          <td style="text-align:center">28</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">12</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Aarav Kapoor (ANV-2026-0234), Riya Patel (ANV-2026-0235), Karan Singh (ANV-2026-0236), Meera Iyer (ANV-2026-0237), Arjun Nair (ANV-2026-0238), Tara Joshi (ANV-2026-0239), Vivaan Kumar (ANV-2026-0240), Diya mishra (ANV-2026-0241)</td>
+        </tr>
+        <tr>
+          <td><b>Asha Verma</b></td>
+          <td>asha.verma@anveshan.in</td>
+          <td style="text-align:center">16</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">9</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Aarav Kapoor (ANV-2026-0234), Riya Patel (ANV-2026-0235), Karan Singh (ANV-2026-0236), Meera Iyer (ANV-2026-0237), Arjun Nair (ANV-2026-0238), Tara Joshi (ANV-2026-0239), Vivaan Kumar (ANV-2026-0240), Diya mishra (ANV-2026-0241)</td>
+        </tr>
+        <tr>
+          <td><b>Anand Krishnan</b></td>
+          <td>anand.krishnan@anveshan.in</td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">3</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Riya Patel (ANV-2026-0235), Karan Singh (ANV-2026-0236), Arjun Nair (ANV-2026-0238), Vivaan Kumar (ANV-2026-0240)</td>
+        </tr>
+        <tr>
+          <td><b>Mukesh Yadav</b></td>
+          <td>mukesh.yadav@anveshan.in</td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">3</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Riya Patel (ANV-2026-0235), Karan Singh (ANV-2026-0236), Arjun Nair (ANV-2026-0238), Vivaan Kumar (ANV-2026-0240)</td>
+        </tr>
+        <tr>
+          <td><b>Suresh Kumar</b></td>
+          <td>suresh.kumar@anveshan.in</td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">3</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Riya Patel (ANV-2026-0235), Karan Singh (ANV-2026-0236), Arjun Nair (ANV-2026-0238), Vivaan Kumar (ANV-2026-0240)</td>
+        </tr>
+        <tr>
+          <td><b>Rohit Singh</b></td>
+          <td>rohit.singh@anveshan.in</td>
+          <td style="text-align:center">8</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">3</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Aarav Kapoor (ANV-2026-0234), Riya Patel (ANV-2026-0235), Karan Singh (ANV-2026-0236), Meera Iyer (ANV-2026-0237), Arjun Nair (ANV-2026-0238), Tara Joshi (ANV-2026-0239), Vivaan Kumar (ANV-2026-0240), Diya mishra (ANV-2026-0241)</td>
+        </tr>
+        <tr>
+          <td><b>Dr. Anjali Reddy</b></td>
+          <td>anjali.reddy@anveshan.in</td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">2</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Karan Singh (ANV-2026-0236), Vivaan Kumar (ANV-2026-0240)</td>
+        </tr>
+        <tr>
+          <td><b>Sunil Bhatia</b></td>
+          <td>sunil.bhatia@anveshan.in</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">1</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Riya Patel (ANV-2026-0235)</td>
+        </tr>
+        <tr>
+          <td><b>Vikram Anveshan (via EA)</b></td>
+          <td>ceo.office@anveshan.in</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">1</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Aarav Kapoor (ANV-2026-0234), Meera Iyer (ANV-2026-0237), Vivaan Kumar (ANV-2026-0240)</td>
+        </tr>
+        <tr>
+          <td><b>Rakesh Tiwari</b></td>
+          <td>rakesh.tiwari@anveshan.in</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:center"><span class="badge" style="background:#dc2626">1</span></td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Arjun Nair (ANV-2026-0238)</td>
+        </tr>
+        <tr>
+          <td><b>Manish Khurana</b></td>
+          <td>manish.khurana@anveshan.in</td>
+          <td style="text-align:center">4</td>
+          <td style="text-align:center">0</td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Aarav Kapoor (ANV-2026-0234), Diya mishra (ANV-2026-0241)</td>
+        </tr>
+        <tr>
+          <td><b>Rohit Bansal</b></td>
+          <td>rohit.bansal@anveshan.in</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:center">0</td>
+          <td style="text-align:center">0</td>
+          <td style="font-size:11px">Meera Iyer (ANV-2026-0237)</td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+<p class="gen-note">
+  Generated by Anveshan Industries Onboarding Automation Engine v1.0 |
+  2026-04-30 |
+  All rules sourced from onboarding_policy.txt v4.2 |
+  Replace new_joinees.csv and re-run onboarding_automation.py to refresh.
+</p>
+
+</body>
+</html>
