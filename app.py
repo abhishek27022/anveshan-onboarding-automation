@@ -395,7 +395,7 @@ with tab1:
     styled = (
         esc_df[show_cols]
         .style
-        .applymap(color_priority, subset=["escalation_priority"])
+        def style_priority_table(df):     """     Safely style priority column for Streamlit across different pandas versions.     Works even if the priority column has been renamed.     """     if df is None or df.empty:         return df      possible_priority_cols = [         "escalation_priority",         "Priority",         "priority",         "Escalation Priority",         "ESCALATION_PRIORITY",     ]      priority_col = None     for col in possible_priority_cols:         if col in df.columns:             priority_col = col             break      if priority_col is None:         return df      styler = df.style      # pandas newer versions prefer Styler.map; older versions use applymap     if hasattr(styler, "map"):         return styler.map(color_priority, subset=[priority_col])     else:         return styler.applymap(color_priority, subset=[priority_col])
         .applymap(color_status,   subset=["task_status_initial"])
     )
     st.dataframe(styled, use_container_width=True, height=500)
