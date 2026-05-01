@@ -943,15 +943,15 @@ with tab1:
 
     c1, c2 = st.columns([1.1, 1])
     with c1:
-        st.plotly_chart(due_timeline_chart(filtered), use_container_width=True)
+        st.plotly_chart(due_timeline_chart(filtered), use_container_width=True, key="overview_due_timeline")
     with c2:
-        st.plotly_chart(status_donut(filtered), use_container_width=True)
+        st.plotly_chart(status_donut(filtered), use_container_width=True, key="overview_status_donut")
 
     c3, c4 = st.columns([1, 1])
     with c3:
-        st.plotly_chart(owner_load_chart(filtered), use_container_width=True)
+        st.plotly_chart(owner_load_chart(filtered), use_container_width=True, key="overview_owner_load")
     with c4:
-        st.plotly_chart(department_treemap(filtered), use_container_width=True)
+        st.plotly_chart(department_treemap(filtered), use_container_width=True, key="overview_department_treemap")
 
     st.markdown("### Today’s highest-priority action list")
     action_cols = [
@@ -1001,7 +1001,7 @@ with tab2:
             unsafe_allow_html=True,
         )
     with j2:
-        st.plotly_chart(readiness_gauge(int(selected["readiness_score"]), f"{selected['joinee_name']} readiness"), use_container_width=True)
+        st.plotly_chart(readiness_gauge(int(selected["readiness_score"]), f"{selected['joinee_name']} readiness"), use_container_width=True, key=f"joinee_readiness_gauge_{selected['employee_id']}")
 
     s1, s2, s3, s4, s5, s6 = st.columns(6)
     s1.metric("Total Tasks", int(selected["total_tasks"]))
@@ -1026,7 +1026,7 @@ with tab2:
         color_discrete_map={"OVERDUE": "#EF4444", "AT RISK": "#F59E0B", "FLAGGED": "#8B5CF6", "Pending": "#22C55E"},
     )
     fig.update_yaxes(autorange="reversed")
-    st.plotly_chart(style_plotly(fig, 460), use_container_width=True)
+    st.plotly_chart(style_plotly(fig, 460), use_container_width=True, key=f"joinee_timeline_{selected['employee_id']}")
 
     st.markdown("### All tasks for selected joinee")
     display_cols = [
@@ -1050,7 +1050,7 @@ with tab3:
         e1.metric("Critical", int((filtered_esc["escalation_priority"] == "Critical").sum()))
         e2.metric("High", int((filtered_esc["escalation_priority"] == "High").sum()))
         e3.metric("Flagged Joinees", filtered_esc["employee_id"].nunique())
-        st.plotly_chart(status_donut(filtered_esc), use_container_width=True)
+        st.plotly_chart(status_donut(filtered_esc), use_container_width=True, key="escalation_status_donut")
         esc_cols = [
             "escalation_priority", "task_status_initial", "due_date", "joining_date", "joinee_name", "employee_id",
             "task_id", "task_name", "owner_name", "owner_email", "sensitivity", "escalation_reason", "recommended_action",
@@ -1083,7 +1083,7 @@ with tab4:
             "joinees_covered": ", ".join(sorted(grp["joinee_name"].unique().tolist())),
         })
     owner_df = pd.DataFrame(owner_rows).sort_values(["urgent_tasks", "total_tasks"], ascending=False)
-    st.plotly_chart(owner_load_chart(action_df), use_container_width=True)
+    st.plotly_chart(owner_load_chart(action_df), use_container_width=True, key="owner_digest_load_chart")
 
     ostyled = owner_df.style
     ostyled = safe_style_map(ostyled, color_urgent, "urgent_tasks")
@@ -1157,9 +1157,9 @@ with tab6:
 
     c1, c2 = st.columns(2)
     with c1:
-        st.plotly_chart(sensitivity_bar(action_df), use_container_width=True)
+        st.plotly_chart(sensitivity_bar(action_df), use_container_width=True, key="audit_sensitivity_bar")
     with c2:
-        st.plotly_chart(department_treemap(action_df), use_container_width=True)
+        st.plotly_chart(department_treemap(action_df), use_container_width=True, key="audit_department_treemap")
 
     st.markdown("### Source data preview")
     p1, p2, p3 = st.tabs(["Joinees", "Task Master", "Contacts"])
