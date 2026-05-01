@@ -1,0 +1,23 @@
+task_id,task_name,owner_role,days_before_joining,applies_to,sensitivity
+T001,Send welcome email + day 1 instructions,HR Executive,5,ALL,Standard
+T002,Create employee record in HRMS,HR Executive,7,ALL,Standard
+T003,Generate offer letter and send for signature,HR Manager,14,ALL,Confidential
+T004,Background verification initiation,HR Executive,10,Permanent,Confidential
+T005,Order laptop and peripherals,IT Admin,7,ALL,Standard
+T006,Create email account and basic system access,IT Admin,2,ALL,Standard
+T007,Reporting manager briefing - role expectations,Reporting Manager,3,ALL,Standard
+T008,Schedule day 1 induction meeting,HR Executive,5,ALL,Standard
+T009,Issue ID card and access badges,Admin,1,ALL,Standard
+T010,Add to org-wide email distribution lists,IT Admin,1,ALL,Standard
+T011,Plant safety induction scheduling,Plant HR,3,Plant-based,Standard
+T012,"Issue safety PPE (helmet, shoes, vest)",Plant Admin,1,Plant-based,Standard
+T013,MES system access provisioning,IT Admin,2,"Manufacturing,Quality,R&D",Standard
+T014,NDA + IP Assignment deed signature collection,HR Manager + Legal,1,"R&D and Innovation,Manufacturing,Quality",Confidential
+T015,Sales target sheet and territory assignment,Sales Manager,1,Sales & Marketing,Confidential
+T016,Banking portal access (restricted role only),CFO Office,0,"Finance Manager,Finance Director",Highly Confidential
+T017,Formulation lab access (R&D senior only),R&D Head,0,"Senior R&D Engineer,R&D Manager,Innovation Manager",Highly Confidential
+T018,Provident Fund and ESI registration,HR Executive,5,Permanent,Confidential
+T019,CXO welcome call (CTC > 15 LPA),CEO Office,7,CTC>15,Standard
+T020,Schedule 30/60/90 day check-ins,HR Manager,0,CTC>15,Standard
+T021,Intern stipend setup (no PF/ESI),HR Executive,5,Intern,Confidential
+T022,Intern project scope confirmation with mentor,Reporting Manager,5,Intern,Standard

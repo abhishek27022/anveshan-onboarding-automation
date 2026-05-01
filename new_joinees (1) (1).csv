@@ -1,0 +1,9 @@
+request_date,name,employee_id,designation,department,reports_to,reports_to_email,location,joining_date,employment_type,ctc_lpa,systems_required,reference_employee
+2026-04-22,Aarav Kapoor,ANV-2026-0234,Senior Manager - Sales,Sales & Marketing,Manish Khurana,manish.khurana@anveshan.in,Delhi HQ,2026-05-12,Permanent,24.0,"Email, ERP-Sales, CRM, Tally-View",Priya Saxena
+2026-04-23,Riya Patel,ANV-2026-0235,Quality Engineer,Quality,Sunil Bhatia,sunil.bhatia@anveshan.in,Manesar Plant,2026-05-05,Permanent,8.5,"Email, ERP-Quality, MES-Manesar",
+2026-04-24,Karan Singh,ANV-2026-0236,Intern - R&D,R&D and Innovation,Dr. Anjali Reddy,anjali.reddy@anveshan.in,Manesar Plant,2026-06-01,Intern,3.0,"Email, R&D-DocPortal",
+2026-04-25,Meera Iyer,ANV-2026-0237,Finance Manager,Finance & Accounts,Rohit Bansal,rohit.bansal@anveshan.in,Delhi HQ,2026-05-08,Permanent,18.0,"Email, ERP-Finance, Tally, BankingPortal-Restricted",
+2026-04-26,Arjun Nair,ANV-2026-0238,Process Engineer,Manufacturing,Rakesh Tiwari,rakesh.tiwari@anveshan.in,Aurangabad Plant,2026-04-29,Permanent,11.0,"Email, ERP-Production, MES-Aurangabad",
+2026-04-26,Tara Joshi,ANV-2026-0239,HR Executive,Human Resources,Asha Verma,asha.verma@anveshan.in,Delhi HQ,2026-05-15,Permanent,6.0,"Email, HRMS-Admin",
+2026-04-27,Vivaan Kumar,ANV-2026-0240,Senior R&D Engineer,R&D and Innovation,Dr. Anjali Reddy,anjali.reddy@anveshan.in,Manesar Plant,2026-05-20,Permanent,22.0,"Email, R&D-DocPortal, FormulationLab-Restricted, ERP-RnD",Sameer Joshi
+2026-04-27,Diya mishra,ANV-2026-0241,Marketing Executive,Sales & Marketing,Manish Khurana,manish.khurana@anveshan.in,Delhi HQ,2026-05-18,Permanent,5.5,"Email, CRM",

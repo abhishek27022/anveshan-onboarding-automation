@@ -1,0 +1,58 @@
+ANVESHAN INDUSTRIES — HR POLICY HANDBOOK
+ONBOARDING SECTION
+Version 4.2 | Last Updated: March 2026
+
+SECTION 1: GENERAL ONBOARDING PRINCIPLES
+
+Anveshan Industries is committed to providing every new joinee with a structured, consistent onboarding experience. The standard onboarding process begins 14 days prior to the joinee's start date and continues through their first 90 days of employment.
+
+All onboarding tasks are owned by named individuals or roles. No task should remain unowned. The HR department serves as the central coordinator, but task execution is distributed across HR, IT, Admin, Finance, the joinee's reporting manager, and where applicable, plant or department leadership.
+
+SECTION 2: ROLE-BASED VARIATIONS
+
+2.1 Permanent Employees vs Interns
+Permanent employees go through full onboarding including background verification, Provident Fund registration, ESI enrollment, and the standard 30/60/90 day check-in cadence. Interns follow a streamlined onboarding without PF/ESI registration; instead, stipend disbursement is set up directly with the Finance team. Interns must have their project scope confirmed with their assigned mentor at least 5 days before joining.
+
+2.2 Plant-based vs HQ-based
+Joinees reporting to a plant location require additional onboarding steps including safety induction scheduling, PPE issuance (helmet, safety shoes, vest as per role), and where applicable, MES system access. Plant safety induction must be scheduled at least 3 working days before joining and is mandatory regardless of role.
+
+2.3 Senior Hires (CTC above 15 LPA)
+Joinees with a CTC above 15 LPA are considered senior hires and receive a CXO-level welcome call before joining. Their 30/60/90 day check-ins are scheduled formally before Day 1, with the HR Manager owning the cadence. Senior hires also receive a personalised first-week itinerary including stakeholder introductions.
+
+SECTION 3: CONFIDENTIALITY-SENSITIVE ROLES
+
+3.1 R&D and Innovation Department
+All R&D joinees, regardless of seniority, must execute the NDA and IP Assignment Deed before their first day of work. The signed documents are collected by the HR Manager in coordination with Legal. R&D joinees at the Senior Engineer level or above additionally require formulation lab access, which is provisioned by the R&D Head only after the NDA + IP Assignment Deed has been countersigned by both parties. Under no circumstances should formulation lab access be granted before NDA execution.
+
+3.2 Manufacturing and Quality Departments
+Manufacturing and Quality joinees also execute the standard NDA and IP Assignment Deed prior to joining. This is non-negotiable for any role with access to process documentation, quality test data, or production line systems.
+
+3.3 Finance Roles with Banking Access
+Finance roles requiring banking portal access (typically Finance Manager and above) require special provisioning by the CFO's office. Banking portal credentials are not issued through the standard IT provisioning process. The CFO or designate must explicitly approve banking access role-by-role. Banking access is classified as Highly Confidential.
+
+3.4 Sales Roles
+Sales joinees receive their territory assignment and target sheet from the Sales Manager on Day 1. Customer lists, pricing structures, and commercial terms are classified as Confidential information. Sales joinees execute a non-solicitation clause as part of their appointment letter.
+
+SECTION 4: TIMELINE AND ESCALATION
+
+4.1 Standard Lead Time
+Anveshan requires a minimum of 14 days lead time between offer acceptance and the joinee's start date. This window is necessary for full onboarding execution including background verification (10 days lead), offer letter generation and counter-signature (14 days lead), and laptop/peripheral procurement (7 days lead).
+
+4.2 Urgent Joinings (Less Than 7 Days)
+Joinings with less than 7 days of lead time are flagged as URGENT and must be escalated to the HR Manager and the joinee's reporting manager simultaneously. Several onboarding tasks cannot be compressed below their minimum lead times — specifically background verification (which requires 10 days), offer letter execution (5 days minimum), and PF/ESI registration (5 days minimum). For urgent joinings, the HR Manager must explicitly approve which tasks will be executed retrospectively and document the deviation.
+
+4.3 Reference Employee Verification
+When a joinee has been referred by an existing Anveshan employee, HR must verify with the referring employee directly before sending the offer. If the referring employee is currently on notice period or has resigned, the reference must be re-validated by the HR Manager and the referrer's reporting manager. Note: Sameer Joshi (R&D Senior, Manesar Plant) is currently on notice period as of April 2026 — any references from Sameer require HR Manager re-validation.
+
+SECTION 5: COMMUNICATION CADENCE
+
+Day -14: Offer letter sent to candidate
+Day -10: Background verification initiated; PF/ESI documentation requested
+Day -7: Laptop ordered; CXO welcome call scheduled (senior hires only)
+Day -5: Welcome email sent; HRMS record created
+Day -3: Plant safety induction scheduled (plant-based only); reporting manager briefing
+Day -2: System access provisioned (email, ERP, MES as applicable); MES access for Mfg/Quality/R&D
+Day -1: ID card issued; PPE issued (plant only); NDA + IP deed signature collection (R&D, Mfg, Quality); sales territory assignment (sales only)
+Day 0: Joining day. Day 1 induction meeting; banking portal access (Finance specific roles); formulation lab access (R&D senior, post-NDA only)
+
+This handbook is the authoritative source for Anveshan Industries onboarding processes. For any deviation, HR Manager approval is required and must be documented.
