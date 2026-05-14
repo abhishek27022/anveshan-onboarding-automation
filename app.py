@@ -59,465 +59,103 @@ if "theme" not in st.session_state:
     st.session_state.theme = "Light"
 
 
-# =============================================================================
-# THEME — Design System v2
-# =============================================================================
-if "theme" not in st.session_state:
-    st.session_state.theme = "Light"
-
-
 def get_theme() -> dict:
     if st.session_state.theme == "Dark":
         return {
-            "bg":            "#0a0e1a",
-            "bg_grad_a":     "#0a0e1a",
-            "bg_grad_b":     "#0f1729",
-            "surface":       "#111827",
-            "surface_2":     "#1f2937",
-            "surface_glass": "rgba(17, 24, 39, 0.72)",
-            "border":        "#1f2937",
-            "border_strong": "#374151",
-            "text":          "#f1f5f9",
+            "bg":            "#0f1419",
+            "surface":       "#1a2027",
+            "surface_2":     "#222831",
+            "border":        "#2d3748",
+            "text":          "#e5e7eb",
             "text_muted":    "#94a3b8",
-            "text_subtle":   "#64748b",
             "primary":       "#3b82f6",
-            "primary_soft":  "rgba(59, 130, 246, 0.15)",
-            "accent":        "#06b6d4",
+            "accent":        "#60a5fa",
             "success":       "#10b981",
-            "success_soft":  "rgba(16, 185, 129, 0.15)",
             "warning":       "#f59e0b",
-            "warning_soft":  "rgba(245, 158, 11, 0.15)",
             "danger":        "#ef4444",
-            "danger_soft":   "rgba(239, 68, 68, 0.15)",
-            "actual":        "#60a5fa",
+            "actual":        "#3b82f6",
             "ai":            "#10b981",
             "manual":        "#f59e0b",
             "plotly":        "plotly_dark",
             "warn_bg":       "#3a2e15",
-            "shadow":        "0 8px 32px rgba(0, 0, 0, 0.4)",
-            "shadow_sm":     "0 2px 8px rgba(0, 0, 0, 0.3)",
-            "grid":          "rgba(148, 163, 184, 0.08)",
         }
     return {
-        "bg":             "#f6f8fc",
-        "bg_grad_a":      "#f6f8fc",
-        "bg_grad_b":      "#eef2f7",
+        "bg":            "#f8fafc",
         "surface":        "#ffffff",
-        "surface_2":      "#f8fafc",
-        "surface_glass":  "rgba(255, 255, 255, 0.82)",
-        "border":         "#e5e9f0",
-        "border_strong":  "#cbd5e1",
-        "text":           "#0b1220",
-        "text_muted":     "#475569",
-        "text_subtle":    "#94a3b8",
-        "primary":        "#0088c2",      # algo8 brand blue
-        "primary_soft":   "rgba(0, 136, 194, 0.10)",
-        "accent":         "#0ea5e9",
-        "success":        "#16a34a",
-        "success_soft":   "rgba(22, 163, 74, 0.10)",
-        "warning":        "#ef8a00",      # algo8 orange
-        "warning_soft":   "rgba(239, 138, 0, 0.10)",
+        "surface_2":      "#f1f5f9",
+        "border":         "#e2e8f0",
+        "text":           "#0f172a",
+        "text_muted":     "#64748b",
+        "primary":        "#2563eb",
+        "accent":         "#3b82f6",
+        "success":        "#059669",
+        "warning":        "#d97706",
         "danger":         "#dc2626",
-        "danger_soft":    "rgba(220, 38, 38, 0.10)",
-        "actual":         "#0088c2",
-        "ai":             "#16a34a",
-        "manual":         "#ef8a00",
+        "actual":         "#2563eb",
+        "ai":             "#059669",
+        "manual":         "#f59e0b",
         "plotly":         "plotly_white",
-        "warn_bg":        "#fff7ec",
-        "shadow":         "0 8px 28px rgba(15, 23, 42, 0.06)",
-        "shadow_sm":      "0 2px 8px rgba(15, 23, 42, 0.04)",
-        "grid":           "rgba(15, 23, 42, 0.06)",
+        "warn_bg":        "#fef3c7",
     }
 
 
 def inject_css() -> None:
     c = get_theme()
-    is_dark = st.session_state.theme == "Dark"
     css = f"""
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
-      /* ============ GLOBAL RESET ============ */
-      html, body, [class*="css"], .stApp, .stMarkdown, .stText {{
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }}
-      .stApp {{
-        background:
-          radial-gradient(1200px 600px at 0% 0%, {c['primary_soft']} 0%, transparent 50%),
-          radial-gradient(1000px 500px at 100% 100%, {c['warning_soft']} 0%, transparent 60%),
-          linear-gradient(180deg, {c['bg_grad_a']} 0%, {c['bg_grad_b']} 100%);
-        color: {c['text']};
-        min-height: 100vh;
-      }}
-      .block-container {{
-        padding-top: 1.1rem;
-        padding-bottom: 2.5rem;
-        max-width: 1500px;
-      }}
-      footer  {{ visibility: hidden; }}
-      #MainMenu {{ visibility: hidden; }}
-      header[data-testid="stHeader"] {{ background: transparent; }}
-
-      /* ============ ANIMATIONS ============ */
-      @keyframes cx-fade-up {{
-        from {{ opacity: 0; transform: translateY(8px); }}
-        to   {{ opacity: 1; transform: translateY(0); }}
-      }}
-      @keyframes cx-shimmer {{
-        0%   {{ background-position: -200% 0; }}
-        100% {{ background-position: 200% 0; }}
-      }}
-      @keyframes cx-pulse-soft {{
-        0%, 100% {{ box-shadow: 0 0 0 0 {c['primary_soft']}; }}
-        50%      {{ box-shadow: 0 0 0 6px transparent; }}
-      }}
-      @keyframes cx-count-up {{
-        from {{ opacity: 0.4; transform: scale(0.96); }}
-        to   {{ opacity: 1;   transform: scale(1); }}
-      }}
-
-      /* ============ HEADER ============ */
+      .stApp {{ background-color: {c['bg']}; color: {c['text']}; }}
+      .block-container {{ padding-top: 1.2rem; padding-bottom: 2rem; max-width: 1500px; }}
       .cx-header {{
-        background:
-          linear-gradient(135deg, {c['primary']} 0%, {'#1e40af' if not is_dark else '#1e3a8a'} 100%);
-        padding: 22px 28px;
-        border-radius: 18px;
-        margin-bottom: 18px;
-        color: white;
-        box-shadow: {c['shadow']};
-        position: relative;
-        overflow: hidden;
-        animation: cx-fade-up 0.5s ease both;
+        background: linear-gradient(135deg, {c['primary']} 0%, {c['accent']} 100%);
+        padding: 18px 24px; border-radius: 12px; margin-bottom: 14px;
+        color: white; box-shadow: 0 4px 16px rgba(0,0,0,0.08);
       }}
-      .cx-header::before {{
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(600px 200px at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 60%),
-          radial-gradient(400px 200px at 0% 100%, rgba(255,255,255,0.10) 0%, transparent 60%);
-        pointer-events: none;
-      }}
-      .cx-header-row {{
-        display: flex; justify-content: space-between; align-items: center;
-        position: relative; z-index: 1; gap: 16px; flex-wrap: wrap;
-      }}
-      .cx-header-brand {{
-        display: flex; align-items: center; gap: 14px;
-      }}
-      .cx-brand-mark {{
-        width: 44px; height: 44px; border-radius: 12px;
-        background: rgba(255,255,255,0.18);
-        backdrop-filter: blur(10px);
-        display: grid; place-items: center;
-        font-size: 22px;
-        border: 1px solid rgba(255,255,255,0.25);
-      }}
-      .cx-header h1 {{
-        color: white; margin: 0;
-        font-size: 22px; font-weight: 700;
-        letter-spacing: -0.02em;
-      }}
-      .cx-header .cx-header-sub {{
-        color: rgba(255,255,255,0.86); margin: 3px 0 0 0;
-        font-size: 12.5px; font-weight: 400;
-      }}
-      .cx-header-pills {{
-        display: flex; gap: 8px; align-items: center;
-      }}
-      .cx-pill {{
-        display: inline-flex; align-items: center; gap: 6px;
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.22);
-        color: white;
-        padding: 6px 12px; border-radius: 999px;
-        font-size: 12px; font-weight: 500;
-      }}
-      .cx-pill .dot {{
-        width: 6px; height: 6px; border-radius: 50%;
-        background: #4ade80;
-        box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
-      }}
-
-      /* ============ KPI CARDS ============ */
+      .cx-header h1 {{ color: white; margin: 0; font-size: 22px; font-weight: 700; }}
+      .cx-header p  {{ color: rgba(255,255,255,0.88); margin: 4px 0 0 0; font-size: 13px; }}
       .cx-card {{
-        background: {c['surface']};
-        border: 1px solid {c['border']};
-        border-radius: 14px;
-        padding: 16px 18px;
-        height: 100%;
-        box-shadow: {c['shadow_sm']};
-        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-        animation: cx-fade-up 0.4s ease both;
-        position: relative;
-        overflow: hidden;
+        background: {c['surface']}; border: 1px solid {c['border']};
+        border-radius: 10px; padding: 14px 16px; height: 100%;
       }}
-      .cx-card::after {{
-        content: "";
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, {c['primary']} 0%, {c['accent']} 100%);
-        opacity: 0;
-        transition: opacity .2s ease;
-      }}
-      .cx-card:hover {{
-        transform: translateY(-2px);
-        box-shadow: {c['shadow']};
-        border-color: {c['border_strong']};
-      }}
-      .cx-card:hover::after {{ opacity: 1; }}
       .cx-card-title {{
-        color: {c['text_muted']};
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        margin-bottom: 8px;
-        font-weight: 600;
-        display: flex; align-items: center; gap: 6px;
+        color: {c['text_muted']}; font-size: 11px; text-transform: uppercase;
+        letter-spacing: 0.04em; margin-bottom: 6px; font-weight: 600;
       }}
-      .cx-card-value {{
-        color: {c['text']};
-        font-size: 26px;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        line-height: 1.1;
-        animation: cx-count-up 0.5s ease both;
-        font-variant-numeric: tabular-nums;
-      }}
-      .cx-card-delta {{
-        font-size: 12px;
-        margin-top: 6px;
-        font-weight: 500;
-        display: inline-flex; align-items: center; gap: 4px;
-      }}
+      .cx-card-value {{ color: {c['text']}; font-size: 24px; font-weight: 700; }}
+      .cx-card-delta {{ font-size: 12px; margin-top: 4px; }}
       .cx-delta-pos     {{ color: {c['success']}; }}
       .cx-delta-neg     {{ color: {c['danger']};  }}
       .cx-delta-neutral {{ color: {c['text_muted']}; }}
-      .cx-delta-pos::before     {{ content: "▲"; font-size: 9px; }}
-      .cx-delta-neg::before     {{ content: "▼"; font-size: 9px; }}
-
-      /* ============ SECTION HEADER ============ */
       .cx-section {{
-        color: {c['text']};
-        font-size: 15px;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        margin: 22px 0 10px 0;
-        padding-bottom: 8px;
-        border-bottom: 1px solid {c['border']};
-        display: flex; align-items: center; gap: 8px;
+        color: {c['text']}; font-size: 14px; font-weight: 700;
+        margin: 18px 0 8px 0; padding-bottom: 4px;
+        border-bottom: 2px solid {c['border']};
       }}
-      .cx-section::before {{
-        content: "";
-        width: 4px; height: 16px;
-        background: linear-gradient(180deg, {c['primary']}, {c['accent']});
-        border-radius: 2px;
-      }}
-
-      /* ============ INSIGHT GRADIENT CARDS ============ */
       .cx-insight {{
-        border-radius: 14px;
-        padding: 16px 20px;
-        color: white;
-        height: 100%;
-        box-shadow: {c['shadow_sm']};
-        position: relative; overflow: hidden;
-        animation: cx-fade-up 0.5s ease both;
+        border-radius: 10px; padding: 14px 18px; color: white; height: 100%;
       }}
-      .cx-insight::before {{
-        content: "";
-        position: absolute; inset: 0;
-        background: radial-gradient(400px 200px at 100% 0%, rgba(255,255,255,0.15) 0%, transparent 60%);
-        pointer-events: none;
-      }}
-      .cx-insight-blue   {{ background: linear-gradient(135deg, #0088c2 0%, #1e40af 100%); }}
-      .cx-insight-green  {{ background: linear-gradient(135deg, #10b981 0%, #047857 100%); }}
-      .cx-insight-orange {{ background: linear-gradient(135deg, #ef8a00 0%, #c2410c 100%); }}
-      .cx-insight h3 {{
-        color: white; margin: 0 0 8px 0;
-        font-size: 13px; font-weight: 600;
-        text-transform: uppercase; letter-spacing: 0.05em;
-        position: relative; z-index: 1;
-      }}
-      .cx-insight .big {{
-        font-size: 24px; font-weight: 700; margin: 6px 0;
-        letter-spacing: -0.02em; position: relative; z-index: 1;
-        font-variant-numeric: tabular-nums;
-      }}
-      .cx-insight p {{
-        color: rgba(255,255,255,0.94); margin: 2px 0;
-        font-size: 12.5px; position: relative; z-index: 1;
-      }}
-
-      /* ============ INFO STRIP ============ */
+      .cx-insight-blue   {{ background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }}
+      .cx-insight-green  {{ background: linear-gradient(135deg, #10b981 0%, #059669 100%); }}
+      .cx-insight-orange {{ background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }}
+      .cx-insight h3 {{ color: white; margin: 0 0 6px 0; font-size: 14px; font-weight: 700; }}
+      .cx-insight .big {{ font-size: 22px; font-weight: 700; margin: 4px 0; }}
+      .cx-insight p {{ color: rgba(255,255,255,0.92); margin: 1px 0; font-size: 12.5px; }}
       .cx-info {{
-        background: {c['warn_bg']};
-        border-left: 4px solid {c['warning']};
-        color: {c['text']};
-        padding: 12px 16px;
-        border-radius: 10px;
-        font-size: 13px;
-        margin: 10px 0 16px 0;
-        box-shadow: {c['shadow_sm']};
+        background: {c['surface_2']}; border-left: 4px solid {c['primary']};
+        color: {c['text']}; padding: 10px 14px; border-radius: 6px;
+        font-size: 13px; margin: 8px 0 14px 0;
       }}
-
-      /* ============ CHART TITLES ============ */
       .cx-chart-title {{
-        color: {c['text']};
-        font-size: 14px; font-weight: 600;
+        color: {c['text']}; font-size: 14px; font-weight: 600;
         margin: 8px 0 4px 0;
-        letter-spacing: -0.01em;
       }}
       .cx-chart-sub {{
-        color: {c['text_muted']};
-        font-size: 12px; margin-bottom: 6px;
-      }}
-
-      /* ============ TABS — pill style ============ */
-      .stTabs [data-baseweb="tab-list"] {{
-        gap: 4px;
-        background: {c['surface']};
-        border: 1px solid {c['border']};
-        border-radius: 14px;
-        padding: 6px;
-        box-shadow: {c['shadow_sm']};
-      }}
-      .stTabs [data-baseweb="tab"] {{
-        height: 38px;
-        padding: 0 18px;
-        border-radius: 10px;
-        color: {c['text_muted']};
-        background: transparent;
-        transition: all .15s ease;
-        border: none;
-      }}
-      .stTabs [data-baseweb="tab"]:hover {{
-        background: {c['surface_2']};
-        color: {c['text']};
-      }}
-      .stTabs [data-baseweb="tab"][aria-selected="true"] {{
-        background: {c['primary']};
-        color: white !important;
-        box-shadow: 0 2px 10px {c['primary_soft']};
-      }}
-      .stTabs [data-baseweb="tab"][aria-selected="true"] p {{
-        color: white !important;
+        color: {c['text_muted']}; font-size: 12px; margin-bottom: 4px;
       }}
       .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {{
-        font-size: 13.5px; font-weight: 600;
+        font-size: 14px; font-weight: 600;
       }}
-      .stTabs [data-baseweb="tab-highlight"] {{ display: none; }}
-      .stTabs [data-baseweb="tab-border"] {{ display: none; }}
-
-      /* ============ STREAMLIT FORM CONTROLS ============ */
-      [data-testid="stSelectbox"] > div > div,
-      [data-testid="stMultiSelect"] > div > div,
-      [data-testid="stTextInput"] > div > div {{
-        border-radius: 10px !important;
-        border-color: {c['border']} !important;
-        background: {c['surface']} !important;
-      }}
-      [data-testid="stSelectbox"] > div > div:hover,
-      [data-testid="stTextInput"] > div > div:hover {{
-        border-color: {c['primary']} !important;
-      }}
-      .stButton button {{
-        border-radius: 10px;
-        font-weight: 500;
-        transition: all .15s ease;
-      }}
-      .stButton button:hover {{
-        transform: translateY(-1px);
-        box-shadow: {c['shadow_sm']};
-      }}
-
-      /* ============ EXPANDER ============ */
-      [data-testid="stExpander"] {{
-        border: 1px solid {c['border']} !important;
-        border-radius: 12px !important;
-        background: {c['surface']} !important;
-        box-shadow: {c['shadow_sm']};
-        overflow: hidden;
-      }}
-      [data-testid="stExpander"] summary {{
-        padding: 12px 16px !important;
-        font-weight: 600;
-      }}
-      [data-testid="stExpander"] summary:hover {{
-        background: {c['surface_2']};
-      }}
-
-      /* ============ DATAFRAME ============ */
-      [data-testid="stDataFrame"] {{
-        border-radius: 12px !important;
-        overflow: hidden;
-        border: 1px solid {c['border']};
-        box-shadow: {c['shadow_sm']};
-      }}
-
-      /* ============ FILTER CONTAINER ============ */
-      [data-testid="stVerticalBlockBorderWrapper"] {{
-        border-radius: 14px !important;
-        border-color: {c['border']} !important;
-        background: {c['surface_glass']} !important;
-        backdrop-filter: blur(8px);
-        box-shadow: {c['shadow_sm']};
-      }}
-
-      /* ============ FILE UPLOADER ============ */
-      [data-testid="stFileUploader"] section {{
-        border-radius: 12px;
-        border: 2px dashed {c['border_strong']};
-        background: {c['surface_2']};
-        transition: all .15s ease;
-      }}
-      [data-testid="stFileUploader"] section:hover {{
-        border-color: {c['primary']};
-        background: {c['primary_soft']};
-      }}
-
-      /* ============ THEME TOGGLE PILL ============ */
-      .cx-theme-toggle {{
-        display: inline-flex;
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.22);
-        border-radius: 999px;
-        padding: 3px;
-        gap: 2px;
-      }}
-
-      /* ============ STATUS DOTS ============ */
-      .cx-status {{
-        display: inline-flex; align-items: center; gap: 6px;
-        font-size: 11px; font-weight: 500;
-        padding: 3px 10px; border-radius: 999px;
-      }}
-      .cx-status-good {{ color: {c['success']}; background: {c['success_soft']}; }}
-      .cx-status-warn {{ color: {c['warning']}; background: {c['warning_soft']}; }}
-      .cx-status-bad  {{ color: {c['danger']};  background: {c['danger_soft']}; }}
-
-      /* ============ SCROLLBAR ============ */
-      ::-webkit-scrollbar {{ width: 10px; height: 10px; }}
-      ::-webkit-scrollbar-track {{ background: transparent; }}
-      ::-webkit-scrollbar-thumb {{
-        background: {c['border_strong']};
-        border-radius: 999px;
-      }}
-      ::-webkit-scrollbar-thumb:hover {{ background: {c['text_subtle']}; }}
-
-      /* ============ MOBILE ============ */
-      @media (max-width: 768px) {{
-        .cx-header {{ padding: 16px 18px; border-radius: 14px; }}
-        .cx-header h1 {{ font-size: 18px; }}
-        .cx-card-value {{ font-size: 22px; }}
-        .block-container {{ padding-left: 0.6rem; padding-right: 0.6rem; }}
-      }}
+      footer  {{ visibility: hidden; }}
+      #MainMenu {{ visibility: hidden; }}
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
@@ -677,12 +315,11 @@ def compute_alignment(actual_sum: float, forecast_sum: float) -> float:
 # KPI CARD
 # =============================================================================
 def kpi_card(title: str, value: str, sub: str = "",
-             sub_class: str = "cx-delta-neutral", icon: str = "") -> None:
-    icon_html = f'<span style="opacity:0.7">{icon}</span>' if icon else ""
+             sub_class: str = "cx-delta-neutral") -> None:
     sub_html = f'<div class="cx-card-delta {sub_class}">{sub}</div>' if sub else ""
     st.markdown(
         f"""<div class="cx-card">
-              <div class="cx-card-title">{icon_html}{title}</div>
+              <div class="cx-card-title">{title}</div>
               <div class="cx-card-value">{value}</div>
               {sub_html}
             </div>""",
@@ -725,40 +362,12 @@ def _base_layout(fig: go.Figure, height: int = 360,
 
     layout_kwargs = dict(
         template=c["plotly"], height=height,
-        margin=dict(l=12, r=12, t=48 if has_title else 12, b=12),
-        legend=dict(
-            orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
-            font=dict(family="Inter, sans-serif", size=12, color=c["text"]),
-            bgcolor="rgba(0,0,0,0)",
-        ),
-        font=dict(family="Inter, sans-serif", size=12, color=c["text"]),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        hoverlabel=dict(
-            font=dict(family="Inter, sans-serif", size=12),
-            bordercolor=c["border_strong"],
-        ),
-        xaxis=dict(
-            gridcolor=c["grid"],
-            linecolor=c["border"],
-            zerolinecolor=c["border"],
-            tickfont=dict(family="Inter, sans-serif", size=11),
-        ),
-        yaxis=dict(
-            gridcolor=c["grid"],
-            linecolor=c["border"],
-            zerolinecolor=c["border"],
-            tickfont=dict(family="Inter, sans-serif", size=11),
-        ),
+        margin=dict(l=10, r=10, t=44 if has_title else 10, b=10),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
     if title is not None:
         # Use dict form (not None) so Plotly never falls back to "undefined"
-        layout_kwargs["title"] = (
-            dict(text=title,
-                 font=dict(family="Inter, sans-serif", size=14,
-                           color=c["text"]))
-            if title else dict(text="")
-        )
+        layout_kwargs["title"] = dict(text=title) if title else dict(text="")
     fig.update_layout(**layout_kwargs)
     return fig
 
@@ -826,23 +435,10 @@ def _add_no_data_shading(fig, df, value_col, c):
 # HEADER & TOP CONTROLS
 # =============================================================================
 def render_header():
-    is_dark = st.session_state.theme == "Dark"
-    theme_label = "🌙 Dark" if is_dark else "☀️ Light"
     st.markdown(
-        f"""<div class="cx-header">
-             <div class="cx-header-row">
-               <div class="cx-header-brand">
-                 <div class="cx-brand-mark">📊</div>
-                 <div>
-                   <h1>Chemelex Demand Forecasting Cockpit</h1>
-                   <div class="cx-header-sub">AI forecast accuracy · zone-level diagnostics · US region</div>
-                 </div>
-               </div>
-               <div class="cx-header-pills">
-                 <div class="cx-pill"><span class="dot"></span>Live data</div>
-                 <div class="cx-pill">⚡ {theme_label}</div>
-               </div>
-             </div>
+        """<div class="cx-header">
+             <h1>📊 Chemelex Demand Forecasting Cockpit</h1>
+             <p>Forecast accuracy, AI vs manual plan, and where we're off track — US region</p>
            </div>""",
         unsafe_allow_html=True,
     )
@@ -858,22 +454,16 @@ def render_top_controls():
             key="uploader",
         )
     with c2:
-        st.markdown(
-            '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;'
-            'color:var(--text-muted,#64748b);font-weight:600;margin:0 0 6px 2px;">Theme</div>',
-            unsafe_allow_html=True,
-        )
+        st.markdown("&nbsp;", unsafe_allow_html=True)
         choice = st.radio(
             "Theme",
-            options=["☀️ Light", "🌙 Dark"],
+            options=["Light", "Dark"],
             index=0 if st.session_state.theme == "Light" else 1,
             horizontal=True,
             key="theme_radio",
-            label_visibility="collapsed",
         )
-        new_theme = "Light" if choice == "☀️ Light" else "Dark"
-        if new_theme != st.session_state.theme:
-            st.session_state.theme = new_theme
+        if choice != st.session_state.theme:
+            st.session_state.theme = choice
             st.rerun()
     if upload is not None:
         return upload.getvalue(), upload.name
@@ -1255,171 +845,8 @@ def render_overview(fdf, year_sel):
         st.plotly_chart(chart_accuracy_by_zone(fdf), use_container_width=True)
 
     # ------------------------------------------------------------------
-    # SYNTHEFY PROMPT — diagnose why some strategies miss more than others
-    # ------------------------------------------------------------------
-    render_synthefy_prompt(fdf, year_sel)
 
 
-def render_synthefy_prompt(fdf, year_sel):
-    """Compute strategy-level diagnostics and craft a copyable prompt
-    for the Synthefy multimodal AI platform, asking it to explain why
-    Push/RM and BUFFER (at CODP) carry materially higher forecast error
-    than Pull/Kanban, Pull/FG, and Push/MPS.
-    """
-    if fdf.empty or not {"codp_zone", "forecast", "actual"}.issubset(fdf.columns):
-        return
-
-    st.markdown(
-        '<div class="cx-section">🤖 Ask Synthefy — Why are some strategies missing more?</div>',
-        unsafe_allow_html=True)
-    st.caption(
-        "Synthefy is your multimodal AI analyst. Copy the prompt below and paste it "
-        "into Synthefy to get a root-cause diagnosis and recommended actions for the "
-        "strategies with the largest forecast error.")
-
-    # ---- 1. Strategy-level error & share ----
-    z = (fdf[fdf["codp_zone"].isin(OFFICIAL_ZONES)]
-         .groupby("codp_zone")
-         .agg(forecast=("forecast", "sum"),
-              actual=("actual", "sum"),
-              abs_error=("abs_error", "sum"))
-         .reset_index())
-    z = z[z["forecast"] > 0].copy()
-    if z.empty:
-        st.info("Not enough strategy-level data in the current filter to build a prompt.")
-        return
-
-    z["err_pct"]  = (z["actual"] - z["forecast"]) / z["forecast"] * 100
-    z["abs_err_pct"] = z["err_pct"].abs()
-    # MAPE-style on actuals (weighted)
-    z["mape_on_actual"] = np.where(z["actual"] > 0,
-                                   z["abs_error"] / z["actual"] * 100, np.nan)
-    total_actual = z["actual"].sum()
-    z["share_pct"] = z["actual"] / total_actual * 100 if total_actual > 0 else np.nan
-    z = z.sort_values("abs_err_pct", ascending=False)
-
-    # ---- 2. Identify the worst two strategies (by signed error magnitude) ----
-    worst = z.head(2)["codp_zone"].tolist()
-
-    # ---- 3. Worst monthly spikes within the worst strategies ----
-    monthly_lines = []
-    if "date" in fdf.columns:
-        for strat in worst:
-            m_df = (fdf[fdf["codp_zone"] == strat]
-                    .groupby("date", as_index=False)
-                    .agg(f=("forecast", "sum"), a=("actual", "sum")))
-            m_df = m_df[m_df["f"] > 0]
-            if m_df.empty:
-                continue
-            m_df["err"] = (m_df["a"] - m_df["f"]) / m_df["f"] * 100
-            m_df["abs_err"] = m_df["err"].abs()
-            top_months = m_df.sort_values("abs_err", ascending=False).head(3)
-            for _, r in top_months.iterrows():
-                d = pd.to_datetime(r["date"])
-                monthly_lines.append(
-                    f"  - {strat} · {d:%b %Y}: forecast {fmt_money(r['f'])}, "
-                    f"actual {fmt_money(r['a'])}, error {r['err']:+.1f}%")
-
-    # ---- 4. Worst SKUs / categories inside the worst strategies ----
-    sku_lines = []
-    if "product_category_1" in fdf.columns:
-        for strat in worst:
-            s_df = (fdf[(fdf["codp_zone"] == strat)
-                        & (fdf["product_category_1"] != "All")]
-                    .groupby("product_category_1", as_index=False)
-                    .agg(f=("forecast", "sum"), a=("actual", "sum")))
-            s_df = s_df[s_df["f"] > 0]
-            if s_df.empty:
-                continue
-            s_df["err"] = (s_df["a"] - s_df["f"]) / s_df["f"] * 100
-            s_df["abs_err"] = s_df["err"].abs()
-            s_df["share"] = s_df["a"] / s_df["a"].sum() * 100 if s_df["a"].sum() > 0 else 0
-            top_sku = s_df.sort_values("abs_err", ascending=False).head(3)
-            for _, r in top_sku.iterrows():
-                sku_lines.append(
-                    f"  - {strat} · {r['product_category_1']}: "
-                    f"error {r['err']:+.1f}%, share of strategy actual {r['share']:.1f}%")
-
-    # ---- 5. Build the strategy table block ----
-    table_lines = []
-    for _, r in z.iterrows():
-        table_lines.append(
-            f"  - {r['codp_zone']:<22} "
-            f"signed error {r['err_pct']:+6.1f}% · "
-            f"|MAPE| {r['mape_on_actual']:5.1f}% · "
-            f"volume share {r['share_pct']:5.1f}%"
-        )
-
-    # ---- 6. Find which is the top AI model in current view (for context) ----
-    bm, be = _best_in_filtered_error(fdf)
-    top_model_str = f"{bm} (signed error {fmt_signed_pct(be)})" if bm and bm != "—" else "(not available in current view)"
-
-    # ---- 7. Assemble the prompt ----
-    monthly_block = "\n".join(monthly_lines) if monthly_lines else "  (no monthly detail available)"
-    sku_block = "\n".join(sku_lines) if sku_lines else "  (no SKU-level detail available)"
-    worst_str = " and ".join(worst) if worst else "the highest-error strategies"
-
-    prompt = f"""You are Synthefy, a multimodal demand-forecasting analyst for Chemelex's heat-tracing product line (US / NAM region).
-
-CONTEXT
-- Year analysed: {year_sel}
-- Top performing AI model in current view: {top_model_str}
-- Forecast error formula: (Actual − Forecast) / Forecast × 100
-- Manufacturing strategies (CODP zones): Push/RM, BUFFER (at CODP), Pull/Kanban, Pull/FG, Push/MPS
-
-STRATEGY-LEVEL FORECAST ACCURACY
-{chr(10).join(table_lines)}
-
-OBSERVATION
-{worst_str} carry materially higher forecast error than the other strategies. We need to understand why.
-
-WORST MONTHLY SPIKES (top 3 per problem strategy)
-{monthly_block}
-
-WORST PRODUCT CATEGORIES INSIDE THE PROBLEM STRATEGIES
-{sku_block}
-
-TASK
-1. Diagnose the root causes of the elevated forecast error in {worst_str}. In your analysis, consider:
-   - Demand-pattern mismatch: are these strategies dominated by lumpy, project-driven, or long-lead-time SKUs that the AI model cannot signal from history alone?
-   - CODP positioning: is the buffer at the customer order decoupling point sized against the wrong demand distribution (e.g. assumed normal, actually intermittent)?
-   - Raw-material-led push: for Push/RM, is the forecast anchored to RM availability rather than true downstream demand, causing a structural disconnect with actual sales?
-   - Data sufficiency: do these SKUs have enough historical signal (≥ 24 months, low intermittency) for the chosen AI model class, or are they better served by Croston / SBA / intermittent-demand methods?
-   - Seasonality and NPI: are spike months tied to new product introductions, project go-lives, or seasonal heat-tracing demand (winter onset, plant turnaround)?
-   - Hierarchy & aggregation: would a different forecast level (Group vs Product Category vs SKU) reduce error for these strategies?
-
-2. Recommend 3–5 concrete, prioritised actions to reduce forecast error in {worst_str}. For each action specify:
-   - What to change (model, segmentation, buffer policy, planning cadence, data input)
-   - Which strategy / category it applies to
-   - Owner type (Demand Planner, Supply Planner, Data Science, S&OP lead)
-   - Expected MAPE reduction (percentage points) with reasoning
-
-3. Quantify the dollar-value error currently attributable to {worst_str} and the expected $ recovery if your top recommendation is adopted.
-
-OUTPUT FORMAT
-## Root Causes
-(bullet list, grouped by strategy)
-
-## Recommended Actions
-(numbered list with the per-action fields above)
-
-## Expected Impact
-(table: action → MAPE Δ pp → $ recovery estimate → confidence H/M/L)
-
-## Next 30 Days
-(3 specific things the demand-planning team should run / build / decide)
-"""
-
-    # ---- 8. Display: a preview + a code block that's easy to copy ----
-    with st.expander("📋 Open the Synthefy prompt (click to copy)", expanded=False):
-        st.code(prompt, language="markdown")
-        st.download_button(
-            "⬇️ Download prompt as .txt",
-            data=prompt.encode("utf-8"),
-            file_name=f"synthefy_prompt_{year_sel}.txt",
-            mime="text/plain",
-            key="synthefy_dl",
-        )
 
 
 def chart_monthly_fa(fdf):
@@ -2120,18 +1547,10 @@ if __name__ == "__main__":
     main()
     c = get_theme()
     st.markdown(
-        f"""<div style="margin-top:32px;padding:18px 8px 4px 8px;
+        f"""<div style="margin-top:24px;padding-top:12px;
             border-top:1px solid {c['border']};
-            display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
-            color:{c['text_muted']};font-size:12px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="width:6px;height:6px;border-radius:50%;background:{c['success']};
-                    box-shadow:0 0 0 3px {c['success_soft']};"></span>
-              <span><b style="color:{c['text']};">Chemelex Demand Forecasting Cockpit</b></span>
-              <span>·</span>
-              <span>Theme: {st.session_state.theme}</span>
-            </div>
-            <div>Built for demand planning · powered by AI forecasts</div>
+            color:{c['text_muted']};font-size:12px;text-align:center;">
+            Chemelex Demand Forecasting Cockpit • Theme: {st.session_state.theme}
             </div>""",
         unsafe_allow_html=True,
     )
