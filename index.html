@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chemelex Demand Forecasting Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  /* ========= DESIGN TOKENS ========= */
+  :root {
+    --bg-grad-a: #f6f8fc;
+    --bg-grad-b: #eef2f7;
+    --surface: #ffffff;
+    --surface-2: #f8fafc;
+    --surface-glass: rgba(255,255,255,0.82);
+    --border: #e5e9f0;
+    --border-strong: #cbd5e1;
+    --text: #0b1220;
+    --text-muted: #475569;
+    --text-subtle: #94a3b8;
+    --primary: #0088c2;
+    --primary-soft: rgba(0, 136, 194, 0.10);
+    --primary-dark: #006a99;
+    --accent: #0ea5e9;
+    --success: #16a34a;
+    --success-soft: rgba(22, 163, 74, 0.10);
+    --warning: #ef8a00;
+    --warning-soft: rgba(239, 138, 0, 0.10);
+    --danger: #dc2626;
+    --danger-soft: rgba(220, 38, 38, 0.10);
+    --shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 16px 48px rgba(15, 23, 42, 0.10);
+    --grid: rgba(15, 23, 42, 0.06);
+    --radius: 14px;
+    --radius-lg: 18px;
+  }
+  [data-theme="dark"] {
+    --bg-grad-a: #0a0e1a;
+    --bg-grad-b: #0f1729;
+    --surface: #111827;
+    --surface-2: #1f2937;
+    --surface-glass: rgba(17, 24, 39, 0.72);
+    --border: #1f2937;
+    --border-strong: #374151;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+    --primary: #3b82f6;
+    --primary-soft: rgba(59, 130, 246, 0.15);
+    --primary-dark: #1d4ed8;
+    --accent: #06b6d4;
+    --success: #10b981;
+    --success-soft: rgba(16, 185, 129, 0.15);
+    --warning: #f59e0b;
+    --warning-soft: rgba(245, 158, 11, 0.15);
+    --danger: #ef4444;
+    --danger-soft: rgba(239, 68, 68, 0.15);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+    --grid: rgba(148, 163, 184, 0.08);
+  }
+
+  /* ========= BASE ========= */
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background:
+      radial-gradient(1200px 600px at 0% 0%, var(--primary-soft) 0%, transparent 50%),
+      radial-gradient(1000px 500px at 100% 100%, var(--warning-soft) 0%, transparent 60%),
+      linear-gradient(180deg, var(--bg-grad-a) 0%, var(--bg-grad-b) 100%);
+      min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  /* ========= ANIMATIONS ========= */
+  @keyframes cx-fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes cx-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes cx-count {
+    from { opacity: 0.3; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes cx-draw {
+    from { stroke-dashoffset: 1500; }
+    to   { stroke-dashoffset: 0; }
+  }
+  @keyframes cx-grow-y {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
+  @keyframes cx-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+  .stagger > * { animation: cx-fade-up 0.5s ease both; }
+  .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.10s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.15s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.20s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.25s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.30s; }
+
+  /* ========= TOP NAV ========= */
+  .topnav {
+    height: 56px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 18px;
+    color: var(--text);
+    letter-spacing: -0.03em;
+  }
+  .brand .algo {
+    font-size: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--surface);
+  }
+  .nav-right {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .theme-toggle {
+    display: inline-flex;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .theme-toggle button {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    transition: all 0.18s ease;
+  }
+  .theme-toggle button.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 6px var(--primary-soft);
+  }
+  .icon-btn {
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 16px;
+  }
+  .icon-btn:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .icon-btn.bell { position: relative; }
+  .icon-btn.bell::after {
+    content: "3"; position: absolute; top: -4px; right: -4px;
+    background: var(--danger); color: white;
+    border-radius: 999px; font-size: 9px; font-weight: 700;
+    padding: 1px 5px; min-width: 16px; text-align: center;
+    border: 2px solid var(--surface);
+  }
+
+  /* ========= LAYOUT ========= */
+  .wrap {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px 28px 60px 28px;
+  }
+
+  /* ========= HERO HEADER ========= */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: var(--radius-lg);
+    padding: 26px 30px;
+    color: white;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 22px;
+    animation: cx-fade-up 0.5s ease both;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(600px 200px at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 60%),
+      radial-gradient(400px 200px at 0% 100%, rgba(255,255,255,0.10) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-row {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 18px; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .hero-brand { display: flex; align-items: center; gap: 16px; }
+  .hero-mark {
+    width: 50px; height: 50px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(10px);
+    display: grid; place-items: center;
+    font-size: 26px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .hero h1 {
+    margin: 0; font-size: 24px; font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .hero .sub {
+    margin: 4px 0 0 0;
+    color: rgba(255,255,255,0.88);
+    font-size: 13px;
+  }
+  .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: white;
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 500;
+  }
+  .pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.30);
+    animation: cx-pulse 2.4s ease infinite;
+  }
+
+  /* ========= TABS ========= */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 10px 18px;
+    border-radius: 10px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 600; font-size: 13.5px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+  }
+  .tab:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .tab.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 10px var(--primary-soft);
+  }
+
+  /* ========= FILTERS ========= */
+  .filters {
+    background: var(--surface-glass);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    box-shadow: var(--shadow-sm);
+    animation: cx-fade-up 0.5s ease both;
+    animation-delay: 0.08s;
+  }
+  .filter {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .filter label {
+    font-size: 11px; font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .select {
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    padding: 0 12px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+  .select:hover { border-color: var(--primary); }
+  .select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+
+  /* ========= KPI GRID ========= */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::after {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .kpi:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: var(--border-strong);
+  }
+  .kpi:hover::after { opacity: 1; }
+  .kpi-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .kpi-value {
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    animation: cx-count 0.6s ease both;
+  }
+  .kpi-delta {
+    font-size: 12px;
+    margin-top: 6px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .pos { color: var(--success); }
+  .neg { color: var(--danger); }
+  .neu { color: var(--text-muted); }
+  .pos::before { content: "▲"; font-size: 9px; }
+  .neg::before { content: "▼"; font-size: 9px; }
+
+  /* ========= SECTION ========= */
+  .section {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 24px 0 10px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section::before {
+    content: "";
+    width: 4px; height: 18px;
+    background: linear-gradient(180deg, var(--primary), var(--accent));
+    border-radius: 2px;
+  }
+  .section .badge {
+    margin-left: auto;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+
+  /* ========= PANEL / CHART ========= */
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.18s ease;
+  }
+  .panel:hover { box-shadow: var(--shadow); }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .panel-title {
+    font-size: 14px; font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .panel-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .legend {
+    display: flex; gap: 14px; font-size: 11.5px;
+    color: var(--text-muted);
+  }
+  .legend .sq {
+    display: inline-block; width: 10px; height: 10px;
+    border-radius: 3px; margin-right: 6px;
+    vertical-align: -1px;
+  }
+  svg.chart { width: 100%; height: 280px; display: block; }
+  .axis-line { stroke: var(--grid); stroke-width: 1; }
+  .axis-text {
+    fill: var(--text-muted);
+    font-size: 10.5px;
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Insight cards */
+  .insights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 16px 0 22px 0;
+  }
+  .insight {
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    color: white;
+    box-shadow: var(--shadow-sm);
+    position: relative; overflow: hidden;
+    animation: cx-fade-up 0.5s ease both;
+  }
+  .insight::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(400px 200px at 100% 0%, rgba(255,255,255,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .insight-blue   { background: linear-gradient(135deg, #0088c2 0%, #1e40af 100%); }
+  .insight-green  { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+  .insight-orange { background: linear-gradient(135deg, #ef8a00 0%, #c2410c 100%); }
+  .insight h3 {
+    margin: 0 0 6px 0;
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    position: relative; z-index: 1;
+  }
+  .insight .big {
+    font-size: 24px; font-weight: 700;
+    margin: 4px 0;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    position: relative; z-index: 1;
+  }
+  .insight p {
+    margin: 2px 0;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.94);
+    position: relative; z-index: 1;
+  }
+
+  /* ========= TABLE ========= */
+  table.zone-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+  table.zone-table th {
+    text-align: left;
+    padding: 10px 14px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+  }
+  table.zone-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  table.zone-table tr:last-child td { border-bottom: none; }
+  table.zone-table tr:hover td { background: var(--surface-2); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+  }
+  .chip-good { background: var(--success-soft); color: var(--success); }
+  .chip-warn { background: var(--warning-soft); color: var(--warning); }
+  .chip-bad  { background: var(--danger-soft);  color: var(--danger);  }
+
+  /* ========= CTA banner ========= */
+  .cta {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: var(--radius-lg);
+    padding: 24px 30px;
+    color: white;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 18px; flex-wrap: wrap;
+    box-shadow: var(--shadow);
+    margin-top: 24px;
+    position: relative; overflow: hidden;
+  }
+  .cta::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(800px 300px at 100% 100%, rgba(255,255,255,0.18) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cta h2 { margin: 0 0 4px 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; position: relative; z-index: 1; }
+  .cta p { margin: 0; opacity: 0.9; font-size: 13.5px; position: relative; z-index: 1; }
+  .cta-btn {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative; z-index: 1;
+    font-family: inherit;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  /* footer */
+  .footer {
+    margin-top: 32px;
+    padding: 18px 8px 4px 8px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .footer .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 0 3px var(--success-soft);
+    display: inline-block;
+  }
+
+  /* hidden */
+  .hidden { display: none !important; }
+
+  /* ========= MOBILE ========= */
+  @media (max-width: 900px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .wrap { padding: 16px 14px 48px 14px; }
+    .topnav { padding: 0 14px; }
+    .hero { padding: 18px 20px; }
+    .hero h1 { font-size: 19px; }
+    .hero-mark { width: 42px; height: 42px; font-size: 22px; }
+    .kpi-value { font-size: 22px; }
+    .cta { padding: 18px 20px; }
+  }
+</style>
+</head>
+<body data-theme="light">
+
+<!-- ============ TOP NAV ============ -->
+<nav class="topnav">
+  <div class="brand">
+    <span class="algo">algo8</span>
+    <span>chemelex</span>
+  </div>
+  <div class="nav-right">
+    <div class="theme-toggle">
+      <button class="active" data-theme-btn="light">☀️ Light</button>
+      <button data-theme-btn="dark">🌙 Dark</button>
+    </div>
+    <button class="icon-btn bell" aria-label="Notifications">🔔</button>
+    <button class="icon-btn" aria-label="Settings">⚙️</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <div class="hero-row">
+      <div class="hero-brand">
+        <div class="hero-mark">📊</div>
+        <div>
+          <h1>Demand Forecasting Cockpit</h1>
+          <div class="sub">AI forecast accuracy · zone-level diagnostics · 2025 portfolio</div>
+        </div>
+      </div>
+      <div class="hero-pills">
+        <div class="pill"><span class="dot"></span>Live data</div>
+        <div class="pill">⚡ Top model: XGBoost</div>
+        <div class="pill">📅 Jan – Dec 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TABS ============ -->
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="overview">📈 Executive Overview</button>
+    <button class="tab" data-tab="ai-vs-manual">🆚 AI vs Manual Plan</button>
+    <button class="tab" data-tab="errors">🎯 Error by Zone</button>
+    <button class="tab" data-tab="forward">📦 Forward Plan</button>
+  </div>
+
+  <!-- ============ FILTERS ============ -->
+  <div class="filters">
+    <div class="filter">
+      <label>Year</label>
+      <select class="select"><option>2025</option><option>2024</option><option>2026 (forecast)</option></select>
+    </div>
+    <div class="filter">
+      <label>CODP Zone</label>
+      <select class="select"><option>All zones</option><option>BUFFER (at CODP)</option><option>Pull / FG</option><option>Pull / Kanban</option><option>Push / MPS</option><option>Push / RM</option></select>
+    </div>
+    <div class="filter">
+      <label>Plant</label>
+      <select class="select"><option>All plants</option><option>Trenton</option><option>RWC / UCDC</option></select>
+    </div>
+    <div class="filter">
+      <label>Forecast Level</label>
+      <select class="select"><option>Group</option><option>Total</option><option>CODP Zone</option><option>Product Category</option></select>
+    </div>
+    <div class="filter">
+      <label>Measure</label>
+      <select class="select"><option>Order value (USD)</option><option>Order qty (BU)</option></select>
+    </div>
+  </div>
+
+  <!-- ============ PAGE: OVERVIEW ============ -->
+  <section id="overview" class="page">
+
+    <!-- KPI row 1 -->
+    <div class="kpis stagger">
+      <div class="kpi">
+        <div class="kpi-label">🤖 AI Forecast</div>
+        <div class="kpi-value">$245.4M</div>
+        <div class="kpi-delta neu">What the AI predicted</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">💰 Total Actual</div>
+        <div class="kpi-value">$259.6M</div>
+        <div class="kpi-delta pos">Sold $14.2M more than AI forecast</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">📊 Forecast Error</div>
+        <div class="kpi-value">+5.8%</div>
+        <div class="kpi-delta pos">Sold more than AI forecast (under-forecast)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">🎯 Top AI Model</div>
+        <div class="kpi-value">XGBoost</div>
+        <div class="kpi-delta pos">Won 12 of 12 evaluation slots</div>
+      </div>
+    </div>
+
+    <!-- KPI row 2 -->
+    <div class="kpis stagger">
+      <div class="kpi">
+        <div class="kpi-label">🧮 Active Forecast Lines</div>
+        <div class="kpi-value">2,143</div>
+        <div class="kpi-delta neu">Distinct product / plant lines</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">⚠️ Off-track Lines</div>
+        <div class="kpi-value">47</div>
+        <div class="kpi-delta neg">More than 20% off plan</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">📅 Period</div>
+        <div class="kpi-value" style="font-size:18px;">Jan – Dec 2025</div>
+        <div class="kpi-delta neu">12 months observed</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">✨ Best Zone</div>
+        <div class="kpi-value" style="font-size:18px;">Push / MPS</div>
+        <div class="kpi-delta pos">+3.8% forecast error</div>
+      </div>
+    </div>
+
+    <!-- Forecast vs Reality by month -->
+    <div class="section">Forecast vs Reality — by Month <span class="badge">12 months</span></div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">AI Forecast vs Actual</div>
+            <div class="panel-sub">Monthly portfolio ($M)</div>
+          </div>
+          <div class="legend">
+            <span><i class="sq" style="background:var(--manual,#ef8a00)"></i>Forecast</span>
+            <span><i class="sq" style="background:var(--actual,#0088c2)"></i>Actual</span>
+          </div>
+        </div>
+        <svg class="chart" id="lineChart" viewBox="0 0 600 280"></svg>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Forecast Error by Month</div>
+            <div class="panel-sub">Signed % — positive = sold more than planned</div>
+          </div>
+        </div>
+        <svg class="chart" id="errorChart" viewBox="0 0 600 280"></svg>
+      </div>
+    </div>
+
+    <!-- Forecast error by zone -->
+    <div class="section">Where the Business Is — Error by Supply Chain Zone</div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Zone-level forecast error</div>
+            <div class="panel-sub">Buffer & Push / RM are the outliers</div>
+          </div>
+        </div>
+        <svg class="chart" id="zoneChart" viewBox="0 0 600 280" style="height:280px;"></svg>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Zone breakdown</div>
+            <div class="panel-sub">2025 portfolio (USD)</div>
+          </div>
+        </div>
+        <table class="zone-table">
+          <thead>
+            <tr><th>Zone</th><th>Forecast</th><th>Actual</th><th>Error %</th></tr>
+          </thead>
+          <tbody id="zoneRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Insights -->
+    <div class="section">Headline insights</div>
+    <div class="insights">
+      <div class="insight insight-blue">
+        <h3>🎯 Portfolio accuracy</h3>
+        <div class="big">+5.8%</div>
+        <p>2025 signed error · close to plan at portfolio level</p>
+        <p style="opacity:0.8;font-size:11.5px;margin-top:6px;">XGBoost beat all alternatives across 12/12 slots</p>
+      </div>
+      <div class="insight insight-orange">
+        <h3>⚠️ High-error zones</h3>
+        <div class="big">2 of 5</div>
+        <p>Buffer (CODP) & Push / RM both run +22% to +24% error</p>
+        <p style="opacity:0.8;font-size:11.5px;margin-top:6px;">Likely driven by small base, lumpy demand</p>
+      </div>
+      <div class="insight insight-green">
+        <h3>✨ Best performer</h3>
+        <div class="big">Push / MPS</div>
+        <p>+3.8% error on $108M forecast — the largest zone is also the most accurate</p>
+        <p style="opacity:0.8;font-size:11.5px;margin-top:6px;">Pull / FG and Pull / Kanban also within ±6%</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: AI vs MANUAL ============ -->
+  <section id="ai-vs-manual" class="page hidden">
+    <div class="kpis stagger">
+      <div class="kpi">
+        <div class="kpi-label">📋 Manual Plan Error</div>
+        <div class="kpi-value">+12.4%</div>
+        <div class="kpi-delta neg">Sold more than planned · 12 months</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">🤖 AI Forecast Error</div>
+        <div class="kpi-value">+5.8%</div>
+        <div class="kpi-delta pos">Using XGBoost</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">📈 AI Improvement</div>
+        <div class="kpi-value">−6.6 pp</div>
+        <div class="kpi-delta pos">AI has smaller error</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">💵 Error Reduction</div>
+        <div class="kpi-value">$16.2M</div>
+        <div class="kpi-delta pos">Less forecast error</div>
+      </div>
+    </div>
+    <div class="section">AI Forecast vs Actual &nbsp; & &nbsp; Manual Forecast vs Actual</div>
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title" style="color:var(--success)">🤖 AI Forecast vs Actual — +5.8% error</div><div class="panel-sub">Using XGBoost</div></div></div>
+        <svg class="chart" id="aiChart" viewBox="0 0 600 280"></svg>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><div class="panel-title" style="color:var(--warning)">📋 Manual Plan vs Actual — +12.4% error</div><div class="panel-sub">IBP demand plan</div></div></div>
+        <svg class="chart" id="manualChart" viewBox="0 0 600 280"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: ERRORS ============ -->
+  <section id="errors" class="page hidden">
+    <div class="section">Error by Zone — Detailed Breakdown</div>
+    <div class="panel">
+      <table class="zone-table">
+        <thead>
+          <tr><th>Zone</th><th>Forecast ($)</th><th>Actual ($)</th><th>Error %</th><th>Status</th></tr>
+        </thead>
+        <tbody id="errorRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PAGE: FORWARD ============ -->
+  <section id="forward" class="page hidden">
+    <div class="section">Forward Plan — Looking Ahead</div>
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">2026 outlook (forward forecast)</div>
+          <div class="panel-sub">AI forward forecast vs manual plan</div>
+        </div>
+      </div>
+      <svg class="chart" id="forwardChart" viewBox="0 0 600 280"></svg>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <div class="cta">
+    <div>
+      <h2>Open the live cockpit</h2>
+      <p>Filterable, drill-down, with the Synthefy diagnostic prompt baked in</p>
+    </div>
+    <a class="cta-btn" href="#" id="openApp">Launch Streamlit app →</a>
+  </div>
+
+  <div class="footer">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="live-dot"></span>
+      <b style="color:var(--text);">Chemelex Demand Forecasting Cockpit</b>
+      <span>·</span>
+      <span id="themeLabel">Theme: Light</span>
+    </div>
+    <div>Built for demand planning · powered by AI forecasts</div>
+  </div>
+</div>
+
+<script>
+  // ============ THEME TOGGLE ============
+  const body = document.body;
+  const themeBtns = document.querySelectorAll('[data-theme-btn]');
+  const themeLabel = document.getElementById('themeLabel');
+  themeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.themeBtn;
+      body.dataset.theme = t;
+      themeBtns.forEach(b => b.classList.toggle('active', b === btn));
+      themeLabel.textContent = 'Theme: ' + (t.charAt(0).toUpperCase() + t.slice(1));
+      // re-render charts so colours pick up vars
+      setTimeout(renderAll, 60);
+    });
+  });
+
+  // ============ TABS ============
+  const tabs = document.querySelectorAll('.tab');
+  const pages = document.querySelectorAll('.page');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    pages.forEach(p => p.classList.toggle('hidden', p.id !== t.dataset.tab));
+    setTimeout(renderAll, 30);
+  }));
+
+  // ============ DATA (synced with corrected_dashboard CSV, 2025) ============
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // 2025 monthly totals at Total/Best level — values approximated to match Streamlit screenshots
+  // ($M) — these mirror the trajectory in the live dashboard
+  const aiForecast = [18.7, 17.0, 17.5, 14.7, 17.0, 15.0, 15.5, 20.6, 22.1, 22.0, 23.5, 23.8];
+  const actual     = [22.6, 18.4, 15.4, 17.0, 17.1, 16.0, 16.0, 24.0, 21.5, 22.8, 26.7, 25.8];
+  const manualPlan = [22.0, 20.5, 21.0, 19.8, 19.5, 19.0, 19.5, 22.5, 23.0, 23.5, 24.0, 24.5];
+
+  // Forward forecast (Jan-Jun 2026)
+  const forwardMonths = ['Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26'];
+  const forwardAI     = [21.2, 20.8, 21.5, 22.0, 22.8, 23.5];
+  const forwardManual = [22.0, 22.0, 22.5, 22.8, 23.0, 23.2];
+
+  // Error % by zone — from corrected CSV
+  const zoneData = [
+    {zone: 'Push / MPS',       f: 107.67, a: 111.72, err:  +3.8, status: 'good'},
+    {zone: 'Pull / FG',        f: 112.15, a: 117.78, err:  +5.0, status: 'good'},
+    {zone: 'Pull / Kanban',    f:   4.05, a:   3.80, err:  -6.0, status: 'good'},
+    {zone: 'BUFFER (at CODP)', f:  15.06, a:  18.40, err: +22.2, status: 'bad'},
+    {zone: 'Push / RM',        f:   6.42, a:   7.94, err: +23.6, status: 'bad'}
+  ];
+
+  // Signed monthly errors (%)  — derived: (actual - forecast)/forecast*100
+  const monthlyErr = aiForecast.map((f, i) => (actual[i] - f) / f * 100);
+
+  // ============ HELPERS ============
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+  function fmtMoney(m) { return '$' + m.toFixed(1) + 'M'; }
+  function fmtPct(v) { return (v >= 0 ? '+' : '') + v.toFixed(1) + '%'; }
+
+  // ============ CHART DRAWERS ============
+  function clear(svg) { while (svg.firstChild) svg.removeChild(svg.firstChild); }
+
+  function drawLine(svgId, series, opts = {}) {
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    clear(svg);
+    const w = 600, h = 280, padL = 50, padR = 16, padT = 14, padB = 32;
+    const xs = opts.labels || months;
+    const allVals = series.flatMap(s => s.data);
+    const yMin = Math.min(...allVals) * 0.92;
+    const yMax = Math.max(...allVals) * 1.08;
+    const xStep = (w - padL - padR) / (xs.length - 1);
+    const yScale = v => padT + (h - padT - padB) * (1 - (v - yMin) / (yMax - yMin));
+
+    // gridlines
+    for (let i = 0; i < 5; i++) {
+      const y = padT + i * (h - padT - padB) / 4;
+      const v = yMax - (yMax - yMin) * i / 4;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', padL); line.setAttribute('x2', w - padR);
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('class', 'axis-line');
+      svg.appendChild(line);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', padL - 8); t.setAttribute('y', y + 3);
+      t.setAttribute('class', 'axis-text'); t.setAttribute('text-anchor', 'end');
+      t.textContent = '$' + v.toFixed(0) + 'M';
+      svg.appendChild(t);
+    }
+
+    // x-axis labels
+    xs.forEach((label, i) => {
+      const x = padL + i * xStep;
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', x); t.setAttribute('y', h - 10);
+      t.setAttribute('class', 'axis-text'); t.setAttribute('text-anchor', 'middle');
+      t.textContent = label;
+      svg.appendChild(t);
+    });
+
+    // series
+    series.forEach((s, sIdx) => {
+      const pts = s.data.map((v, i) => [padL + i * xStep, yScale(v)]);
+      const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+      // area
+      if (s.area) {
+        const area = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        area.setAttribute('d', d + ` L ${pts[pts.length-1][0]} ${h-padB} L ${pts[0][0]} ${h-padB} Z`);
+        area.setAttribute('fill', s.color);
+        area.setAttribute('opacity', '0.08');
+        svg.appendChild(area);
+      }
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', s.color);
+      path.setAttribute('stroke-width', '2.5');
+      path.setAttribute('stroke-linejoin', 'round');
+      path.setAttribute('stroke-linecap', 'round');
+      if (s.dash) path.setAttribute('stroke-dasharray', '5 4');
+      // animation
+      const len = pts.length * 100;
+      path.setAttribute('stroke-dasharray', s.dash ? '5 4' : len);
+      path.setAttribute('stroke-dashoffset', s.dash ? '0' : len);
+      path.style.transition = 'stroke-dashoffset 1.2s ease ' + (sIdx * 0.15) + 's';
+      svg.appendChild(path);
+      requestAnimationFrame(() => path.setAttribute('stroke-dashoffset', '0'));
+      // dots
+      pts.forEach((p, i) => {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]);
+        c.setAttribute('r', 3.5);
+        c.setAttribute('fill', s.color);
+        c.style.opacity = '0';
+        c.style.transition = 'opacity 0.3s ease ' + (i * 0.05 + sIdx * 0.15 + 0.6) + 's';
+        svg.appendChild(c);
+        requestAnimationFrame(() => c.style.opacity = '1');
+      });
+    });
+  }
+
+  function drawBars(svgId, vals, opts = {}) {
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    clear(svg);
+    const w = 600, h = 280, padL = 50, padR = 16, padT = 14, padB = 32;
+    const xs = opts.labels || months;
+    const yMin = Math.min(0, ...vals) * 1.1;
+    const yMax = Math.max(0, ...vals) * 1.15;
+    const xStep = (w - padL - padR) / xs.length;
+    const yScale = v => padT + (h - padT - padB) * (1 - (v - yMin) / (yMax - yMin));
+    const zero = yScale(0);
+
+    // gridlines
+    for (let i = 0; i < 5; i++) {
+      const y = padT + i * (h - padT - padB) / 4;
+      const v = yMax - (yMax - yMin) * i / 4;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', padL); line.setAttribute('x2', w - padR);
+      line.setAttribute('y1', y); line.setAttribute('y2', y);
+      line.setAttribute('class', 'axis-line');
+      svg.appendChild(line);
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', padL - 8); t.setAttribute('y', y + 3);
+      t.setAttribute('class', 'axis-text'); t.setAttribute('text-anchor', 'end');
+      t.textContent = v.toFixed(0) + '%';
+      svg.appendChild(t);
+    }
+    // zero line
+    const zl = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    zl.setAttribute('x1', padL); zl.setAttribute('x2', w - padR);
+    zl.setAttribute('y1', zero); zl.setAttribute('y2', zero);
+    zl.setAttribute('stroke', cssVar('--text-muted'));
+    zl.setAttribute('stroke-dasharray', '3 4');
+    zl.setAttribute('stroke-width', '1');
+    svg.appendChild(zl);
+
+    // bars
+    vals.forEach((v, i) => {
+      const x = padL + i * xStep + xStep * 0.2;
+      const barW = xStep * 0.6;
+      const y = v >= 0 ? yScale(v) : zero;
+      const barH = Math.abs(yScale(v) - zero);
+      const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      r.setAttribute('x', x); r.setAttribute('width', barW);
+      r.setAttribute('y', zero); r.setAttribute('height', 0);
+      r.setAttribute('rx', 4);
+      let color = cssVar('--success');
+      if (Math.abs(v) > 15) color = cssVar('--danger');
+      else if (Math.abs(v) > 5) color = cssVar('--warning');
+      r.setAttribute('fill', color);
+      r.style.transition = 'y 0.6s ease ' + (i * 0.04) + 's, height 0.6s ease ' + (i * 0.04) + 's';
+      svg.appendChild(r);
+      requestAnimationFrame(() => {
+        r.setAttribute('y', y);
+        r.setAttribute('height', barH);
+      });
+      // label
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', x + barW / 2);
+      t.setAttribute('y', xs[i] ? (v >= 0 ? y - 6 : y + barH + 14) : 0);
+      t.setAttribute('class', 'axis-text');
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('font-weight', '600');
+      t.textContent = fmtPct(v);
+      t.style.opacity = '0';
+      t.style.transition = 'opacity 0.4s ease ' + (i * 0.04 + 0.4) + 's';
+      svg.appendChild(t);
+      requestAnimationFrame(() => t.style.opacity = '1');
+      // x label
+      const xt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      xt.setAttribute('x', x + barW / 2);
+      xt.setAttribute('y', h - 10);
+      xt.setAttribute('class', 'axis-text');
+      xt.setAttribute('text-anchor', 'middle');
+      xt.textContent = xs[i];
+      svg.appendChild(xt);
+    });
+  }
+
+  function drawZoneBars(svgId, data) {
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    clear(svg);
+    const w = 600, h = 280, padL = 130, padR = 30, padT = 14, padB = 28;
+    const sorted = [...data].sort((a, b) => Math.abs(b.err) - Math.abs(a.err));
+    const max = Math.max(...sorted.map(d => Math.abs(d.err))) * 1.2;
+    const rowH = (h - padT - padB) / sorted.length;
+    const xScale = v => padL + (w - padL - padR) / 2 + (v / max) * (w - padL - padR) / 2;
+    const center = padL + (w - padL - padR) / 2;
+    // axis line center
+    const cl = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    cl.setAttribute('x1', center); cl.setAttribute('x2', center);
+    cl.setAttribute('y1', padT); cl.setAttribute('y2', h - padB);
+    cl.setAttribute('stroke', cssVar('--text-muted'));
+    cl.setAttribute('stroke-dasharray', '3 4');
+    svg.appendChild(cl);
+
+    sorted.forEach((d, i) => {
+      const y = padT + i * rowH + rowH * 0.2;
+      const barH = rowH * 0.6;
+      const barW = Math.abs(xScale(d.err) - center);
+      const x = d.err >= 0 ? center : center - barW;
+      let color = cssVar('--success');
+      if (Math.abs(d.err) > 15) color = cssVar('--danger');
+      else if (Math.abs(d.err) > 5) color = cssVar('--warning');
+      const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      r.setAttribute('x', center); r.setAttribute('y', y);
+      r.setAttribute('width', 0); r.setAttribute('height', barH);
+      r.setAttribute('rx', 4);
+      r.setAttribute('fill', color);
+      r.style.transition = 'width 0.7s ease ' + (i * 0.07) + 's, x 0.7s ease ' + (i * 0.07) + 's';
+      svg.appendChild(r);
+      requestAnimationFrame(() => {
+        r.setAttribute('x', x);
+        r.setAttribute('width', barW);
+      });
+      // zone label
+      const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lbl.setAttribute('x', padL - 10);
+      lbl.setAttribute('y', y + barH / 2 + 4);
+      lbl.setAttribute('class', 'axis-text');
+      lbl.setAttribute('text-anchor', 'end');
+      lbl.setAttribute('font-weight', '600');
+      lbl.textContent = d.zone;
+      svg.appendChild(lbl);
+      // value label
+      const v = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      v.setAttribute('x', d.err >= 0 ? xScale(d.err) + 6 : x - 6);
+      v.setAttribute('y', y + barH / 2 + 4);
+      v.setAttribute('class', 'axis-text');
+      v.setAttribute('text-anchor', d.err >= 0 ? 'start' : 'end');
+      v.setAttribute('font-weight', '600');
+      v.setAttribute('fill', color);
+      v.textContent = fmtPct(d.err);
+      v.style.opacity = '0';
+      v.style.transition = 'opacity 0.4s ease ' + (i * 0.07 + 0.5) + 's';
+      svg.appendChild(v);
+      requestAnimationFrame(() => v.style.opacity = '1');
+    });
+  }
+
+  // ============ ZONE TABLE ============
+  function renderZoneRows() {
+    const rows = [...zoneData].sort((a,b) => Math.abs(b.err) - Math.abs(a.err)).map(d => {
+      const chipClass = d.status === 'good' ? 'chip-good' : d.status === 'warn' ? 'chip-warn' : 'chip-bad';
+      const chipLabel = d.status === 'good' ? '● on plan' : d.status === 'warn' ? '● watch' : '● off plan';
+      return `<tr>
+        <td><b>${d.zone}</b></td>
+        <td>$${d.f.toFixed(1)}M</td>
+        <td>$${d.a.toFixed(1)}M</td>
+        <td><span class="chip ${chipClass}">${fmtPct(d.err)}</span></td>
+      </tr>`;
+    }).join('');
+    document.getElementById('zoneRows').innerHTML = rows;
+
+    const errorRows = [...zoneData].sort((a,b) => Math.abs(b.err) - Math.abs(a.err)).map(d => {
+      const chipClass = d.status === 'good' ? 'chip-good' : 'chip-bad';
+      const chipLabel = d.status === 'good' ? 'On plan' : 'Off plan — investigate';
+      return `<tr>
+        <td><b>${d.zone}</b></td>
+        <td>$${(d.f * 1e6).toLocaleString()}</td>
+        <td>$${(d.a * 1e6).toLocaleString()}</td>
+        <td><b>${fmtPct(d.err)}</b></td>
+        <td><span class="chip ${chipClass}">${chipLabel}</span></td>
+      </tr>`;
+    }).join('');
+    document.getElementById('errorRows').innerHTML = errorRows;
+  }
+
+  // ============ RENDER ALL ============
+  function renderAll() {
+    const manualCol = cssVar('--warning');
+    const actualCol = cssVar('--primary');
+    const aiCol = cssVar('--success');
+
+    drawLine('lineChart', [
+      { data: aiForecast, color: manualCol },
+      { data: actual,     color: actualCol, area: true }
+    ]);
+    drawBars('errorChart', monthlyErr);
+    drawZoneBars('zoneChart', zoneData);
+    if (document.getElementById('aiChart')) {
+      drawLine('aiChart', [
+        { data: aiForecast, color: aiCol },
+        { data: actual,     color: actualCol, area: true }
+      ]);
+      drawLine('manualChart', [
+        { data: manualPlan, color: manualCol },
+        { data: actual,     color: actualCol, area: true }
+      ]);
+    }
+    if (document.getElementById('forwardChart')) {
+      drawLine('forwardChart', [
+        { data: forwardAI,     color: aiCol },
+        { data: forwardManual, color: manualCol, dash: true }
+      ], { labels: forwardMonths });
+    }
+    renderZoneRows();
+  }
+  renderAll();
+
+  // ============ CTA — try to detect the streamlit URL ============
+  // Fallback to a generic streamlit cloud pattern if not provided
+  document.getElementById('openApp').addEventListener('click', e => {
+    if (!e.currentTarget.getAttribute('href') || e.currentTarget.getAttribute('href') === '#') {
+      e.preventDefault();
+      alert('Set the href on #openApp to your Streamlit Cloud URL (e.g. https://your-app.streamlit.app)');
+    }
+  });
+</script>
+</body>
+</html>
