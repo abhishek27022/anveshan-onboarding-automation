@@ -622,11 +622,50 @@ def main():
         main_df = auto_main
 
     if main_df is None or main_df.empty:
-        st.info(f"👋 **Welcome.** Place `{PRIMARY_FILE}` next to `app.py` "
-                "or upload a forecast file above to begin.")
-        for m in msgs:
-            st.caption(m)
-        st.stop()
+    st.warning(
+        "No forecast data loaded yet. Please upload `corrected_dashboard_forecast_accuracy_levelled.csv` using the upload box above."
+    )
+
+    st.markdown(
+        """
+        **Required file:** `corrected_dashboard_forecast_accuracy_levelled.csv`  
+        Since this file is larger than GitHub's browser upload limit, do not upload it to GitHub.  
+        Upload it directly here in the Streamlit app.
+        """
+    )
+
+    with st.expander("Expected columns", expanded=True):
+        st.code(
+            """
+actual
+forecast
+accuracy_pct
+error
+abs_error
+bias_pct
+wape_component_num
+wape_component_den
+data_quality_flags
+level
+dimension_value
+codp_zone
+plant
+product_category_1
+date
+year
+month
+target
+model
+split
+is_best
+            """,
+            language="text",
+        )
+
+    for m in msgs:
+        st.caption(m)
+
+    st.stop()
 
     # ---- Filters ----
     with st.container(border=True):
